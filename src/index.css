@@ -1,0 +1,7 @@
+::-webkit-scrollbar {
+  overflow: hidden;
+}
+html {
+  scroll-padding-top: 7rem;
+  scroll-behavior: smooth;
+}
