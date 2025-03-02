@@ -1,17 +1,18 @@
 {
   "name": "final-project",
+  "homepage": "https://H3TOoM.github.io/prescripto",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d build",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d dist"
+    
   },
-  "homepage": "https://H3TOoM.github.io/prescripto",
   "dependencies": {
     "@tailwindcss/cli": "^4.0.9",
     "@tailwindcss/postcss": "^4.0.9",
