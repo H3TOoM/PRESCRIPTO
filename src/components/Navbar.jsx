@@ -65,7 +65,7 @@ function Navbar() {
             <img src={assets.cross_icon} alt="" onClick={() => setMenu(false)} className="w-7"/>
           </div>
           <ul className="flex flex-col items-center gap-2 px-5 text-lg font-medium">
-            <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/'>Home</NavLink>
+            <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/prescripto'>Home</NavLink>
             <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/doctors'>All Doctors</NavLink>
             <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/about'>About</NavLink>
             <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/contact'>Contact</NavLink>
