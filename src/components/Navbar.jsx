@@ -11,11 +11,11 @@ function Navbar() {
 
   return (
     <section className="flex item-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 nav container">
-      <a href="/">
+      <a href="/home">
         <img className="w-40 cursor-pointer" src={assets.logo} alt="" onClick={()=> navigate('/')}/>
       </a>
       <ul className="hidden md:flex gap-4 font-medium nav-link mx-auto">
-        <NavLink to='/'>
+        <NavLink to='/home'>
           <li className="py-1">Home</li>
           <hr className="border-none outline-none h-0.5 w-3/5 m-auto line hidden" />
         </NavLink>
