@@ -12,7 +12,7 @@ function Navbar() {
   return (
     <section className="flex item-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 uppercase">
       <a href="/prescripto">
-        <img className="w-40 cursor-pointer" src={assets.logo} alt="" onClick={()=> navigate('/')}/>
+        <img className="w-40 cursor-pointer" src={assets.logo} alt="" onClick={()=> navigate('/prescripto')}/>
       </a>
       <ul className="hidden md:flex gap-4 font-medium ml-[220px] mx-auto items-center">
         <NavLink to='/prescripto'>
