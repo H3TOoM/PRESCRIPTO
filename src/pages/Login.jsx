@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import "./style.css";
 
 const Login = () => {
   const [state, setState] = useState("Sign Up");
@@ -55,7 +54,7 @@ const Login = () => {
             className="border border-zinc-300 rounded w-full p-2 mt-1 outline-0"
           />
         </div>
-        <button className="create text-white w-full py-2 rounded-md text-base mt-3 cursor-pointer">
+        <button className="bg-[#5F6FFF] text-white px-8 py-3 rounded-md font-light hidden md:block cursor-pointer text-medium hover:opacity-[0.8]  m-auto mt-5">
           {state === "Sign Up" ? "Create Account" : "Login"}
         </button>
 

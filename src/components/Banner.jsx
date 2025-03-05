@@ -1,6 +1,5 @@
 import React from "react";
 import { assets } from "../assets/assets";
-import '../pages/style.css'
 import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
@@ -8,7 +7,7 @@ const Banner = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex banner rounded-lg px-6 sm:px-10 md:px-14 lg:px-12 my-20 md:mx-10 ">
+    <div className="flex bg-[#5F6FFF] rounded-lg px-6 sm:px-10 md:px-14 lg:px-12 my-20 md:mx-10 ">
       {/* left side */}
       <div className="flex-1 py-8 sm:py-16 lg:py-24 lg:pl-5">
         <div className="text-lg sm:text-2xl md:text-3xl lg:text-5xl font-semibold text-white">

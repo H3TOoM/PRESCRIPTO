@@ -1,7 +1,7 @@
 import React from 'react'
 import { useContext } from 'react'
 import {AppContext} from '../context/AppContext'
-import './style.css'
+
 
 const MyAppointment = () => {
 
@@ -28,7 +28,7 @@ const MyAppointment = () => {
             </div>
             <div></div>
             <div className='flex flex-col gap-2 justify-end font-medium'>
-              <button className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-blue-400 hover:text-white transtion-all duration-300'>Pay Online</button>
+              <button className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5F6FFF] hover:text-white transtion-all duration-300'>Pay Online</button>
               <button className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-500 hover:text-white transtion-all duration-600'>Cancel appointment</button>
             </div>
           </div>

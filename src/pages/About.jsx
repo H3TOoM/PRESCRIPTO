@@ -1,6 +1,5 @@
 import React from "react";
 import { assets } from "../assets/assets";
-import './style.css'
 
 const About = () => {
   return (
@@ -49,21 +48,21 @@ const About = () => {
       </div>
 
       <div className="flex flex-col md:flex-row mb-20">
-        <div className="border border-gray-200 px-10 md:px-15 py-8 sm:py-16 flex flex-col gap-4 text-[15px] choose-container cursor-pointer">
+        <div className="border border-gray-200 px-10 md:px-15 py-8 sm:py-16 flex flex-col gap-4 text-[15px] hover:bg-[#5F6FFF] hover:text-white transition-all duration-300 cursor-pointer">
           <b>Efficiency:</b>
           <p>
             Streamlined appointment scheduling that fits into your busy
             lifestyle.
           </p>
         </div>
-        <div className="border border-gray-200 px-10 md:px-15 py-8 sm:py-16 flex flex-col gap-4 text-[15px] choose-container cursor-pointer">
+        <div className="border border-gray-200 px-10 md:px-15 py-8 sm:py-16 flex flex-col gap-4 text-[15px] hover:bg-[#5F6FFF] hover:text-white transition-all duration-300 cursor-pointer">
           <b>Convenience:</b>
           <p>
             Access to a network of trusted healthcare professionals in your
             area.
           </p>
         </div>
-        <div className="border border-gray-200 px-10 md:px-15 py-8 sm:py-16 flex flex-col gap-4 text-[15px] choose-container cursor-pointer">
+        <div className="border border-gray-200 px-10 md:px-15 py-8 sm:py-16 flex flex-col gap-4 text-[15px] hover:bg-[#5F6FFF] hover:text-white transition-all duration-300 cursor-pointer">
           <b>Personalization:</b>
           <p>
             Tailored recommendations and reminders to help you stay on top of

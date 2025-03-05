@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
-import "./style.css";
 import RelatedDoctors from "../components/RelatedDoctors";
 
 const Appointment = () => {
@@ -28,6 +27,7 @@ const Appointment = () => {
 
     let today = new Date();
     for (let i = 0; i < 7; i++) {
+      
       // getting date with index
       let currentDate = new Date(today);
       currentDate.setDate(today.getDate() + i);
@@ -90,7 +90,7 @@ const Appointment = () => {
             <img
               src={docInfo.image}
               alt=""
-              className="w-full sm:max-w-72 rounded-lg doc-book-image"
+              className="w-full sm:max-w-72 rounded-lg bg-[#5F6FFF]"
             />
           </div>
 
@@ -132,7 +132,7 @@ const Appointment = () => {
           <div className="flex gap-3 items-center w-full over-flow-x-scroll mt-4">
             {
               docSlots.length && docSlots.map((item,index)=>(
-                <div onClick={()=> setSlotIndex(index)} key={index} className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? 'bg-blue-500 text-white' : 'border border-gray-200'}`}>
+                <div onClick={()=> setSlotIndex(index)} key={index} className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? 'bg-[#5F6FFF] text-white' : 'border border-gray-200'}`}>
                   <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
                   <p>{item[0] && item[0].datetime.getDate()}</p>
                 </div>
@@ -144,13 +144,13 @@ const Appointment = () => {
           <div className="flex items-center gap-3 w-full overflow-x-scroll mt-5">
             {docSlots.length && docSlots[slotIndex].map((item,index) => (
 
-              <p onClick={()=> setSlotTime(item.time)} key={index} className={`flex text-sm font-light flex-shirnk-0 px-8 py-1  rounded-full cursor-pointer border border-gray-200 ${item.time === slotTime ? 'bg-blue-500 text-white' : 'text-color-gray'}`}>
+              <p onClick={()=> setSlotTime(item.time)} key={index} className={`flex text-sm font-light flex-shirnk-0 px-8 py-1  rounded-full cursor-pointer border border-gray-200 ${item.time === slotTime ? 'bg-[#5F6FFF] text-white' : 'text-color-gray'}`}>
                {item.time.toUpperCase()}
               </p>
 
             ))}
           </div>
-          <button className=" text-gray-600 text-sm  px-14 py-3 rounded-full mt-8 cursor-pointer border border-gray-500 uppercase">Book an appointment</button>
+          <button className=" text-white text-sm  px-14 py-3 rounded-full mt-8 cursor-pointer border border-gray-500 uppercase bg-[#5F6FFF]">Book an appointment</button>
         </div>
 
         {/* Listed Related Doctors */}

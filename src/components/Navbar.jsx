@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
-import "../pages/style.css";
+import "../index.css";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 
@@ -10,29 +10,29 @@ function Navbar() {
   const [token, setToken] = useState(false);
 
   return (
-    <section className="flex item-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 nav container">
+    <section className="flex item-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 uppercase">
       <a href="/prescripto">
         <img className="w-40 cursor-pointer" src={assets.logo} alt="" onClick={()=> navigate('/')}/>
       </a>
-      <ul className="hidden md:flex gap-4 font-medium nav-link mx-auto">
+      <ul className="hidden md:flex gap-4 font-medium ml-[220px] mx-auto items-center">
         <NavLink to='/prescripto'>
           <li className="py-1">Home</li>
-          <hr className="border-none outline-none h-0.5 w-3/5 m-auto line hidden" />
+          <hr className="border-none outline-none h-0.5 w-3/5 m-auto bg-[#5F6FFF] hidden" />
         </NavLink>
 
         <NavLink to='/doctors'>
           <li className="py-1">All Doctors</li>
-          <hr className="border-none outline-none h-0.5 w-3/5 m-auto line hidden" />
+          <hr className="border-none outline-none h-0.5 w-3/5 m-auto bg-[#5F6FFF] hidden" />
         </NavLink>
 
         <NavLink to='/about'>
           <li className="py-1">About</li>
-          <hr className="border-none outline-none h-0.5 w-3/5 m-auto line hidden" />
+          <hr className="border-none outline-none h-0.5 w-3/5 m-auto bg-[#5F6FFF] hidden" />
         </NavLink>
 
         <NavLink to='/contact'>
           <li className="py-1">Contact</li>
-          <hr className="border-none outline-none h-0.5 w-3/5 m-auto line hidden" />
+          <hr className="border-none outline-none h-0.5 w-3/5 m-auto bg-[#5F6FFF] hidden" />
         </NavLink>
       </ul>
 
@@ -51,7 +51,7 @@ function Navbar() {
           </div>
         ) : (
           <button
-            className="create text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer"
+            className="bg-[#5F6FFF] text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer text-medium hover:opacity-[0.8]"
             onClick={() => navigate("/login")}
           >
             Create Account
@@ -65,7 +65,7 @@ function Navbar() {
             <img src={assets.cross_icon} alt="" onClick={() => setMenu(false)} className="w-7"/>
           </div>
           <ul className="flex flex-col items-center gap-2 px-5 text-lg font-medium">
-            <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/'>Home</NavLink>
+            <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/prescripto'>Home</NavLink>
             <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/doctors'>All Doctors</NavLink>
             <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/about'>About</NavLink>
             <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/contact'>Contact</NavLink>
