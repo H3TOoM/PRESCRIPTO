@@ -10,7 +10,7 @@ const Header = () => {
           Book Appointment <br /> With Trusted Doctors
         </p>
         <div className="flex flex-col md:flex-row items-cenetr gap-3 text-white text-sm font-light">
-          <img src={assets.group_profiles} alt="" className="w-30" />
+          <img src={assets.group_profiles} alt="" className="w-30 blur-[2px]" />
           <p>
             Simply browse through our extensive list of trusted doctors,<br className="hidden sm:block"/>
             schedule your appointment hassle-free.
@@ -25,7 +25,7 @@ const Header = () => {
         <img
           src={assets.header_img}
           alt=""
-          className="w-full md:absolute bottom-0 h-auto rounded-lg "
+          className="w-full md:absolute bottom-0 h-auto rounded-lg blur-sm"
         />
       </div>
     </div>

@@ -11,7 +11,7 @@ const Contact = () => {
       </div>
 
       <div className="my-10 flex flex-col justify-center md:flex-row gap-10 mb-28 text-sm">
-        <img src={assets.contact_image} alt="" className="w-full md:max-w-[360px]"/>
+        <img src={assets.contact_image} alt="" className="w-full md:max-w-[360px] blur-sm"/>
 
         <div className="flex flex-col justify-center items-start gap-6">
           <p className="font-semibold text-lg text-gray-600">Our OFFICE</p>

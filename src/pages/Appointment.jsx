@@ -90,7 +90,7 @@ const Appointment = () => {
             <img
               src={docInfo.image}
               alt=""
-              className="w-full sm:max-w-72 rounded-lg bg-[#5F6FFF]"
+              className="w-full sm:max-w-72 rounded-lg bg-[#5F6FFF] blur-sm"
             />
           </div>
 

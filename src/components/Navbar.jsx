@@ -4,10 +4,10 @@ import "../index.css";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 
-function Navbar() {
+const  Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setMenu] = useState(false);
-  const [token, setToken] = useState(false);
+  const [token, setToken] = useState(true);
 
   return (
     <section className="flex item-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 uppercase">

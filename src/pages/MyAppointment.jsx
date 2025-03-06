@@ -16,7 +16,7 @@ const MyAppointment = () => {
         doctors.slice(0,3).map((item,index) => (
           <div key={index} className='grid grid-col-[1fr_2fr] gap-4 sm:flex sm:gap-6 border-b border-gray-300'>
             <div className='p-3'>
-              <img src={item.image} alt="" className='w-32 bg-indigo-50'/>
+              <img src={item.image} alt="" className='w-32 bg-indigo-50 blur-xs'/>
             </div>
             <div className='flex-1 text-sm text-zinc-600'>
               <p className='text-neutral-800 font-semibold mt-2'>{item.name}</p>
