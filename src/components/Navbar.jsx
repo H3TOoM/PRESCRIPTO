@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 const  Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setMenu] = useState(false);
-  const [token, setToken] = useState(true);
+  const [token, setToken] = useState(false);
 
   return (
     <section className="flex item-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 uppercase">
