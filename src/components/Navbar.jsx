@@ -14,6 +14,7 @@ const  Navbar = () => {
       <a href="/prescripto">
         <img className="w-40 cursor-pointer" src={assets.logo} alt="" onClick={()=> navigate('/prescripto')}/>
       </a>
+
       <ul className="hidden md:flex gap-4 font-medium ml-[220px] mx-auto items-center">
         <NavLink to='/prescripto'>
           <li className="py-1">Home</li>
@@ -59,16 +60,16 @@ const  Navbar = () => {
         )}
         <img src={assets.menu_icon} alt="" className="w-6 md:hidden" onClick={() => setMenu(true)}/>
         {/* Menu for mobile */}
-        <div className={`${showMenu ? 'fixed w-full' : 'h-0 w-0'} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transtion-all duration-300`}>
+        <div className={`${showMenu ? 'fixed w-full h-full' : 'h-0 w-0'} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all duration-300`}>
           <div className="flex items-center justify-between px-5 py-6">
             <img src={assets.logo} alt="" className="w-36"/>
             <img src={assets.cross_icon} alt="" onClick={() => setMenu(false)} className="w-7"/>
           </div>
           <ul className="flex flex-col items-center gap-2 px-5 text-lg font-medium">
-            <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/prescripto'>Home</NavLink>
-            <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/doctors'>All Doctors</NavLink>
-            <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/about'>About</NavLink>
-            <NavLink onClick={() => showMenu(false)} className="px-4 py-2 rounded inline-block" to='/contact'>Contact</NavLink>
+            <NavLink onClick={() => setMenu(false)} className="px-4 py-2 rounded inline-block" to='/prescripto'>Home</NavLink>
+            <NavLink onClick={() => setMenu(false)} className="px-4 py-2 rounded inline-block" to='/doctors'>All Doctors</NavLink>
+            <NavLink onClick={() => setMenu(false)} className="px-4 py-2 rounded inline-block" to='/about'>About</NavLink>
+            <NavLink onClick={() => setMenu(false)} className="px-4 py-2 rounded inline-block" to='/contact'>Contact</NavLink>
           </ul>
         </div>
       </div>
