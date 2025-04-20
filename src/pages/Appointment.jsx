@@ -162,7 +162,7 @@ const Appointment = () => {
                 </p>
               ))}
           </div>
-          <button className=" text-white text-sm  px-14 py-3 rounded-full mt-8 cursor-pointer border border-gray-500 uppercase bg-[#5F6FFF]">
+          <button className=" text-white text-sm  px-14 py-3 rounded-full mt-8 cursor-pointer uppercase bg-[#5F6FFF] hover:scale-[1.02] transition-all duration-300">
             Book an appointment
           </button>
         </div>
