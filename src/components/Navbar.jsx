@@ -20,7 +20,7 @@ const Navbar = () => {
         />
       </a>
 
-      <ul className="hidden md:flex gap-4 font-medium ml-[220px] mx-auto items-center">
+      <ul className="hidden md:flex gap-4 font-medium mx-auto items-center">
         <NavLink to="/prescripto">
           <li className="py-1">Home</li>
           <hr className="border-none outline-none h-0.5 w-3/5 m-auto bg-[#5F6FFF] hidden" />
@@ -40,6 +40,7 @@ const Navbar = () => {
           <li className="py-1">Contact</li>
           <hr className="border-none outline-none h-0.5 w-3/5 m-auto bg-[#5F6FFF] hidden" />
         </NavLink>
+
       </ul>
 
       <div className="flex items-center gap-4">
