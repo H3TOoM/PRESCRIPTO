@@ -152,7 +152,7 @@ const Appointment = () => {
                 <div
                   onClick={() => setSlotTime(item.time)}
                   key={index}
-                  className={`flex text-sm font-light flex-shirnk-0 px-1 w-[300px] h-[30px] items-center justify-center rounded-full cursor-pointer border border-gray-200 ${
+                  className={`flex text-sm font-light flex-shirnk-0 px-8 items-center rounded-full cursor-pointer border border-gray-200 ${
                     item.time === slotTime
                       ? "bg-[#5F6FFF] text-white"
                       : "text-color-gray"
