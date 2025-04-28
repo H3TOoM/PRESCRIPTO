@@ -149,17 +149,17 @@ const Appointment = () => {
           <div className="flex items-center gap-3 w-full overflow-x-scroll mt-5">
             {docSlots.length &&
               docSlots[slotIndex].map((item, index) => (
-                <p
+                <div
                   onClick={() => setSlotTime(item.time)}
                   key={index}
-                  className={`flex text-sm font-light flex-shirnk-0 px-8 py-1  rounded-full cursor-pointer border border-gray-200 ${
+                  className={`flex text-sm font-light flex-shirnk-0 px-1 w-[300px] h-[30px] items-center justify-center rounded-full cursor-pointer border border-gray-200 ${
                     item.time === slotTime
                       ? "bg-[#5F6FFF] text-white"
                       : "text-color-gray"
                   }`}
                 >
                   {item.time.toUpperCase()}
-                </p>
+                </div>
               ))}
           </div>
           <button className=" text-white text-sm  px-14 py-3 rounded-full mt-8 cursor-pointer uppercase bg-[#5F6FFF] hover:scale-[1.02] transition-all duration-300">
