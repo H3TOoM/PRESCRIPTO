@@ -21,7 +21,7 @@ const Navbar = () => {
       </a>
 
       <ul className="hidden md:flex gap-4 font-medium mx-auto items-center">
-        <NavLink to="/prescripto">
+        <NavLink to="/">
           <li className="py-1">Home</li>
           <hr className="border-none outline-none h-0.5 w-3/5 m-auto bg-[#5F6FFF] hidden" />
         </NavLink>
@@ -104,7 +104,7 @@ const Navbar = () => {
             <NavLink
               onClick={() => setMenu(false)}
               className="px-4 py-2 rounded inline-block"
-              to="/prescripto"
+              to="/"
             >
               Home
             </NavLink>
