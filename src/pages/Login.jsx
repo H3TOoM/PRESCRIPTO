@@ -1,17 +1,60 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [state, setState] = useState("Sign Up");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+
+  const handlerChange = (e) => {
+    setUserInfo({
+      ...userInfo,
+      [e.target.name]: e.target.value
+    });
   };
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+
+    const storedData = JSON.parse(localStorage.getItem("UserData"));
+
+    if (state === "Sign Up") {
+      localStorage.setItem("UserData", JSON.stringify(userInfo));
+      Swal.fire({
+        title: "Sign Up Successful",
+        icon: "success",
+      });
+      navigate("/");
+      location.reload();
+    } else {
+      if (
+        storedData &&
+        storedData.email === userInfo.email &&
+        storedData.password === userInfo.password
+      ) {
+        Swal.fire({
+          title: "Login Successful",
+          icon: "success",
+        });
+        navigate("/");
+        location.reload();
+      } else {
+        Swal.fire({
+          title: "Login Failed",
+          text: "Invalid email or password",
+          icon: "warning",
+        });
+      }
+    }
+  };
+
   return (
-    <form className="min-h-[80vh] flex items-center">
+    <form className="min-h-[80vh] flex items-center" onSubmit={onSubmitHandler}>
       <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border border-gray-200 rounded-lg text-zinc-600 text-sm shadow-lg">
         <p className="text-2xl font-semibold">
           {state === "Sign Up" ? "Create Account" : "Login"}
@@ -25,8 +68,9 @@ const Login = () => {
             <p>Full Name</p>
             <input
               type="text"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              name="name"
+              onChange={handlerChange}
+              value={userInfo.name}
               required
               className="border border-zinc-300 rounded w-full p-2 mt-1 outline-0"
             />
@@ -37,8 +81,9 @@ const Login = () => {
           <p>Email</p>
           <input
             type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            name="email"
+            onChange={handlerChange}
+            value={userInfo.email}
             required
             className="border border-zinc-300 rounded w-full p-2 mt-1 outline-0"
           />
@@ -48,35 +93,36 @@ const Login = () => {
           <p>Password</p>
           <input
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            name="password"
+            onChange={handlerChange}
+            value={userInfo.password}
             required
             className="border border-zinc-300 rounded w-full p-2 mt-1 outline-0"
           />
         </div>
-        <button className="bg-[#5F6FFF] text-white px-8 py-3 rounded-md font-light hidden md:block cursor-pointer text-medium hover:opacity-[0.8]  m-auto mt-5">
+
+        <button className="bg-[#5F6FFF] text-white px-8 py-3 rounded-md font-light md:block cursor-pointer text-medium hover:opacity-[0.8] m-auto mt-5">
           {state === "Sign Up" ? "Create Account" : "Login"}
         </button>
 
         {state === "Sign Up" ? (
           <p>
-            Already Have An Account?{" "}
+            Already have an account?{" "}
             <span
               className="text-blue-400 underline cursor-pointer"
               onClick={() => setState("Login")}
             >
-              {" "}
               Login Here
             </span>
           </p>
         ) : (
           <p>
-            Create An Account?{" "}
+            Don't have an account?{" "}
             <span
               className="text-blue-400 underline cursor-pointer"
               onClick={() => setState("Sign Up")}
             >
-              Click Here
+              Sign Up
             </span>
           </p>
         )}

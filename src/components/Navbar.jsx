@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import "../index.css";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +7,36 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setMenu] = useState(false);
+  const [userData, setUserData] = useState({})
   const [token, setToken] = useState(false);
+
+
+  useEffect(() => {
+    const Data = localStorage.getItem("UserData");
+    if (Data) {
+      const parsedData = JSON.parse(Data);
+      setUserData(parsedData);
+      setToken(true);
+    }
+  }, []);
+
+
+  const logout = () => {
+    localStorage.removeItem("UserData");
+    setToken(false)
+    setUserData({})
+    Swal.fire({
+      title: "Logout Succesfull",
+      icon: "success",
+      draggable: true
+    });
+    navigate("/login")
+  }
+
 
   return (
     <section className="flex item-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 uppercase">
-      <a href="/prescripto">
+      <a href="/">
         <img
           className="w-40 cursor-pointer"
           src={assets.logo}
@@ -46,7 +71,7 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {token ? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
-            <img src={assets.profile_pic} alt="" className="w-8 rounded-full" />
+            <img src={userData.image ? userData.image : assets.profile_pic} alt="" className="w-8 rounded-full" />
             <img src={assets.dropdown_icon} alt="" className="w-2.5" />
             <div className="absolute top-0 right-0 pt-15 text-base font-medium text-gray-600 z-20 hidden group-hover:block">
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
@@ -64,7 +89,7 @@ const Navbar = () => {
                 </p>
                 <p
                   className="hover:text-black cursor-pointer"
-                  onClick={() => setToken(false)}
+                  onClick={logout}
                 >
                   Log Out
                 </p>
@@ -87,9 +112,8 @@ const Navbar = () => {
         />
         {/* Menu for mobile */}
         <div
-          className={`${
-            showMenu ? "fixed w-full h-full" : "h-0 w-0"
-          } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all duration-300`}
+          className={`${showMenu ? "fixed w-full h-full" : "h-0 w-0"
+            } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all duration-300`}
         >
           <div className="flex items-center justify-between px-5 py-6">
             <img src={assets.logo} alt="" className="w-36" />
