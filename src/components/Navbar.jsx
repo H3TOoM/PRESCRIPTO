@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import "../index.css";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setMenu] = useState(false);
   const [userData, setUserData] = useState({})
-  const [token, setToken] = useState(false);
+  const {token,setToken} = useContext(AppContext)
 
 
   useEffect(() => {
@@ -22,7 +23,6 @@ const Navbar = () => {
 
 
   const logout = () => {
-    localStorage.removeItem("UserData");
     setToken(false)
     setUserData({})
     Swal.fire({
@@ -30,7 +30,7 @@ const Navbar = () => {
       icon: "success",
       draggable: true
     });
-    navigate("/login")
+    navigate("login")
   }
 
 
@@ -65,15 +65,13 @@ const Navbar = () => {
           <li className="py-1">Contact</li>
           <hr className="border-none outline-none h-0.5 w-3/5 m-auto bg-[#5F6FFF] hidden" />
         </NavLink>
-
       </ul>
-
       <div className="flex items-center gap-4">
         {token ? (
-          <div className="flex items-center gap-2 cursor-pointer group relative">
+          <div className="flex items-center gap-2 cursor-pointer group relative" onClick={()=> setShowGroup(true)}>
             <img src={userData.image ? userData.image : assets.profile_pic} alt="" className="w-8 rounded-full" />
             <img src={assets.dropdown_icon} alt="" className="w-2.5" />
-            <div className="absolute top-0 right-0 pt-15 text-base font-medium text-gray-600 z-20 hidden group-hover:block">
+            <div className={`absolute top-0 right-0 pt-15 text-base font-medium text-gray-600 z-20 hidden group-hover:block`}>
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
                 <p
                   className="hover:text-black cursor-pointer"
