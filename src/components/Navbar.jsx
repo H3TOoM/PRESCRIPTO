@@ -9,7 +9,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setMenu] = useState(false);
   const [userData, setUserData] = useState({})
-  const {token,setToken} = useContext(AppContext)
+  const { token, setToken } = useContext(AppContext)
 
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const Navbar = () => {
       </ul>
       <div className="flex items-center gap-4">
         {token ? (
-          <div className="flex items-center gap-2 cursor-pointer group relative" onClick={()=> setShowGroup(true)}>
+          <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => setShowGroup(true)}>
             <img src={userData.image ? userData.image : assets.profile_pic} alt="" className="w-8 rounded-full" />
             <img src={assets.dropdown_icon} alt="" className="w-2.5" />
             <div className={`absolute top-0 right-0 pt-15 text-base font-medium text-gray-600 z-20 hidden group-hover:block`}>
@@ -150,6 +150,13 @@ const Navbar = () => {
               to="/contact"
             >
               Contact
+            </NavLink>
+            <NavLink
+              onClick={() => setMenu(false)}
+              className="px-4 py-2 rounded inline-block"
+              to="/my-profile"
+            >
+              My Profile
             </NavLink>
           </ul>
         </div>
