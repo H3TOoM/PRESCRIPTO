@@ -1,4 +1,4 @@
-import { createContext,useState } from "react";
+import { createContext, useState } from "react";
 import { doctors } from "../assets/assets";
 
 
@@ -7,13 +7,14 @@ export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
   const [token, setToken] = useState(false);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const value = {
-    doctors,token,setToken
+    doctors, token, setToken, backendUrl
   };
 
-  return(
+  return (
     <AppContext.Provider value={value}>
-        {props.children}
+      {props.children}
     </AppContext.Provider>
   )
 };

@@ -10,6 +10,7 @@ import MyAppointment from "./pages/MyAppointment";
 import Appointment from "./pages/Appointment";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import VerifyOTP from "./pages/VerifyOTP";
 
 const App = () => {
   return (
@@ -20,9 +21,10 @@ const App = () => {
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/doctors/:speciality" element={<Doctors />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/My-Profile" element={<MyProfile />} />
+        <Route path="/profile" element={<MyProfile />} />
         <Route path="/My-Appointment" element={<MyAppointment />} />
         <Route path="/Appointment/:docId" element={<Appointment />} />
       </Routes>

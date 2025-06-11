@@ -1,35 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
+import authService from "../services/authService";
 
 const MyProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [userData, setUserData] = useState({
-    name: "",
+    name: '',
     image: assets.profile_pic,
     email: "",
     phone: "",
     address: { line1: "", line2: "" },
-    gender: "Male",
+    gender:"",
     dob: "",
   });
 
-  // Load from localStorage on mount
-  useEffect(() => {
+ useEffect(() => {
+  const loadData = async () => {
+    try {
+      const fetchedData = await authService.getCurrentUser();
+
+      setUserData((prev) => ({
+        ...prev,
+        name: fetchedData.name || "",
+        email: fetchedData.email || "",
+        gender: fetchedData.gender || "",
+        image: fetchedData.image || assets.profile_pic,
+      }));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+
     const data = localStorage.getItem("UserData");
     if (data) {
       const parsed = JSON.parse(data);
-      setUserData({
+      setUserData((prev) => ({
+        ...prev,
         ...parsed,
         address: parsed.address || { line1: "", line2: "" },
-      });
+      }));
     }
-  }, []);
+  };
+
+  loadData();
+}, []);
+
 
   // Save to localStorage on update
   const saveProfile = () => {
     localStorage.setItem("UserData", JSON.stringify(userData));
     setIsEdit(false);
-    location.reload()
   };
 
   const handleImageUpload = (e) => {
@@ -48,9 +67,9 @@ const MyProfile = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-xl mt-8">
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col sm:flex-row items-center gap-3">
         <img
-          src={userData.image ? userData.image : assets.profile_pic}
+          src={userData.image ? userData.image : assets.upload_icon}
           alt="Profile"
           className="w-32 h-32 object-cover rounded-full border-4 border-indigo-500"
         />
@@ -62,6 +81,7 @@ const MyProfile = () => {
             className="text-sm"
           />
         )}
+        <br />
         {isEdit ? (
           <input
             type="text"

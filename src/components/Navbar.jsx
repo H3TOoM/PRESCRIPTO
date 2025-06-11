@@ -4,27 +4,39 @@ import "../index.css";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
+import authService from "../services/authService";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setMenu] = useState(false);
   const [userData, setUserData] = useState({})
   const { token, setToken } = useContext(AppContext)
+  const [userInfo, setUserInfo] = useState(null);
 
 
   useEffect(() => {
-    const Data = localStorage.getItem("UserData");
-    if (Data) {
-      const parsedData = JSON.parse(Data);
-      setUserData(parsedData);
-      setToken(true);
-    }
+    const userInfo = localStorage.getItem("UserData");
+    setUserInfo(JSON.parse(userInfo));
+
+    const fetchUser = async () => {
+      try {
+        const data = await authService.getCurrentUser();
+        if (data || data.accessToken) {
+          setUserData(data);
+          setToken(true);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    fetchUser();
   }, []);
+
 
 
   const logout = () => {
     setToken(false)
-    setUserData({})
     Swal.fire({
       title: "Logout Succesfull",
       icon: "success",
@@ -69,13 +81,13 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {token ? (
           <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => setShowGroup(true)}>
-            <img src={userData.image ? userData.image : assets.profile_pic} alt="" className="w-8 rounded-full" />
+            <img src={assets.upload_icon} alt="" className="w-8 rounded-full px-3 py-3 border border-gray-300" />
             <img src={assets.dropdown_icon} alt="" className="w-2.5" />
             <div className={`absolute top-0 right-0 pt-15 text-base font-medium text-gray-600 z-20 hidden group-hover:block`}>
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
                 <p
                   className="hover:text-black cursor-pointer"
-                  onClick={() => navigate("my-profile")}
+                  onClick={() => navigate("profile")}
                 >
                   My Profile
                 </p>
@@ -151,13 +163,15 @@ const Navbar = () => {
             >
               Contact
             </NavLink>
+            {token?
             <NavLink
               onClick={() => setMenu(false)}
               className="px-4 py-2 rounded inline-block"
               to="/my-profile"
             >
               My Profile
-            </NavLink>
+            </NavLink> : null}
+            
           </ul>
         </div>
       </div>
