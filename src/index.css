@@ -10,7 +10,12 @@
 }
 .active hr {
   display: block;
+  background-color: #5F6FFF;
 }
 .top-doctor-container {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.text-primary{
+  color: #5F6FFF;
 }

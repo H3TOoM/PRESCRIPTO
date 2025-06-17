@@ -1,36 +1,43 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
-import { useFormik } from 'formik';
+import authService from "../services/authService";
 import * as Yup from 'yup';
-import authService from '../services/authService';
+import { useFormik } from 'formik';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const [state, setState] = useState("Login");
+  const { token, setToken } = useContext(AppContext);
+  const navigate = useNavigate();
+  // const formik = useFormik()
+
+  const [state, setState] = useState("Sign Up");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState('')
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
   const { login } = useAuth();
+
   const formik = useFormik({
     initialValues: {
-      firstName: '',
+      firstName: name,
       lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      gender: '',
-      role: '',
-      rememberMe: false,
+      email: email,
+      password: password,
+      confirmPassword: password,
+      gender: gender,
+      role: 2,
+      rememberMe: true,
     },
     validationSchema: Yup.object({
       ...(state === "Sign Up" && {
         firstName: Yup.string().required('First name is required'),
-        lastName: Yup.string().required('Last name is required'),
+
         gender: Yup.string().required('Gender is required'),
-        role: Yup.string().required('Role is required'),
-        confirmPassword: Yup.string()
-          .oneOf([Yup.ref('password'), null], 'Passwords must match')
-          .required('Confirm password is required'),
+
       }),
       email: Yup.string()
         .email('Invalid email')
@@ -89,7 +96,7 @@ const Login = () => {
 
           if (response.success || response.accessToken) {
             login(response, response.accessToken);
-            
+
             navigate('/profile');
             location.reload();
             return;
@@ -113,7 +120,7 @@ const Login = () => {
 
   return (
     <form onSubmit={formik.handleSubmit} className="min-h-[80vh] flex items-center">
-      <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border border-gray-200 rounded-lg text-zinc-600 text-sm shadow-lg">
+      <div className="flex flex-col gap-3 m-auto items-start p-5 min-w-[340px] sm:min-w-96 border border-gray-200 rounded-lg text-zinc-600 text-sm shadow-lg">
         <p className="text-2xl font-semibold">{state === "Sign Up" ? "Create Account" : "Login"}</p>
         <p>Please {state.toLowerCase()} to book appointment</p>
 
@@ -124,7 +131,7 @@ const Login = () => {
         )}        {state === "Sign Up" && (
           <>
             <div className="w-full">
-              <p>First Name</p>
+              <p>Name</p>
               <input
                 type="text"
                 name="firstName"
@@ -136,22 +143,6 @@ const Login = () => {
               />
               {formik.touched.firstName && formik.errors.firstName && (
                 <div className="text-red-500 text-xs mt-1">{formik.errors.firstName}</div>
-              )}
-            </div>
-
-            <div className="w-full">
-              <p>Last Name</p>
-              <input
-                type="text"
-                name="lastName"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.lastName}
-                className={`border rounded w-full p-2 mt-1 outline-0 ${formik.touched.lastName && formik.errors.lastName ? 'border-red-500' : 'border-zinc-300'
-                  }`}
-              />
-              {formik.touched.lastName && formik.errors.lastName && (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.lastName}</div>
               )}
             </div>
           </>
@@ -171,7 +162,8 @@ const Login = () => {
           {formik.touched.email && formik.errors.email && (
             <div className="text-red-500 text-xs mt-1">{formik.errors.email}</div>
           )}
-        </div>        <div className="w-full">
+        </div>
+        <div className="w-full">
           <p>Password</p>
           <input
             type="password"
@@ -186,43 +178,13 @@ const Login = () => {
           )}
         </div>
 
-        {state === "Login" && (
-          <div className="w-full">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="rememberMe"
-                onChange={formik.handleChange}
-                checked={formik.values.rememberMe}
-                className="mr-2"
-              />
-              <span className="text-sm text-gray-700">Remember me</span>
-            </label>
-          </div>
-        )}
 
-        {state === "Sign Up" && (
-          <div className="w-full">
-            <p>Confirm Password</p>
-            <input
-              type="password"
-              name="confirmPassword"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.confirmPassword}
-              className={`border rounded w-full p-2 mt-1 outline-0 ${formik.touched.confirmPassword && formik.errors.confirmPassword ? 'border-red-500' : 'border-zinc-300'
-                }`}
-            />
-            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-              <div className="text-red-500 text-xs mt-1">{formik.errors.confirmPassword}</div>
-            )}
-          </div>
-        )}
 
         {state === "Sign Up" && (
           <>
             <div className="w-full">
-              <p>Gender</p>              <select
+              <p>Gender</p>
+              <select
                 name="gender"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -238,26 +200,9 @@ const Login = () => {
                 <div className="text-red-500 text-xs mt-1">{formik.errors.gender}</div>
               )}
             </div>
-
-            <div className="w-full">
-              <p>Role</p>              <select
-                name="role"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.role}
-                className={`border rounded w-full p-2 mt-1 outline-0 ${formik.touched.role && formik.errors.role ? 'border-red-500' : 'border-zinc-300'
-                  }`}
-              >
-                <option value="">Select Role</option>
-                <option value="Doctor">Doctor</option>
-                <option value="Patient">Patient</option>
-              </select>
-              {formik.touched.role && formik.errors.role && (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.role}</div>
-              )}
-            </div>
           </>
-        )}        <button
+        )}
+        <button
           type="submit"
           disabled={loading}
           className="bg-[#5F6FFF] text-white px-8 py-3 rounded-md font-light md:block cursor-pointer text-medium hover:opacity-[0.8] disabled:opacity-50 m-auto mt-5"

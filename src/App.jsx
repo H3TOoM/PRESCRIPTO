@@ -11,6 +11,10 @@ import Appointment from "./pages/Appointment";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import VerifyOTP from "./pages/VerifyOTP";
+import InquiriesBtn from "./components/InquiriesBtn";
+import Inquiries from "./pages/Inquiries";
+import EditAppointment from "./pages/EditAppointment";
+
 
 const App = () => {
   return (
@@ -27,7 +31,10 @@ const App = () => {
         <Route path="/profile" element={<MyProfile />} />
         <Route path="/My-Appointment" element={<MyAppointment />} />
         <Route path="/Appointment/:docId" element={<Appointment />} />
+        <Route path="/inquiries" element={<Inquiries/>}/>
+        <Route path="/edit-appointment" element={<EditAppointment/>}/>
       </Routes>
+      <InquiriesBtn/>
       <Footer/>
     </div>
   );

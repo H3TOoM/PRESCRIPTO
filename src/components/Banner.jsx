@@ -5,7 +5,6 @@ import { AppContext } from "../context/AppContext";
 
 const Banner = () => {
   const navigate = useNavigate();
-  // const data = localStorage.getItem("UserData");
   const {token} = useContext(AppContext)
   return (
     <div className="flex bg-[#5F6FFF] rounded-lg px-6 sm:px-10 md:px-14 lg:px-12 my-20 md:mx-10 ">

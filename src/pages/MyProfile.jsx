@@ -10,39 +10,39 @@ const MyProfile = () => {
     email: "",
     phone: "",
     address: { line1: "", line2: "" },
-    gender:"",
+    gender: "",
     dob: "",
   });
 
- useEffect(() => {
-  const loadData = async () => {
-    try {
-      const fetchedData = await authService.getCurrentUser();
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const fetchedData = await authService.getCurrentUser();
 
-      setUserData((prev) => ({
-        ...prev,
-        name: fetchedData.name || "",
-        email: fetchedData.email || "",
-        gender: fetchedData.gender || "",
-        image: fetchedData.image || assets.profile_pic,
-      }));
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
+        setUserData((prev) => ({
+          ...prev,
+          name: fetchedData.name || "",
+          email: fetchedData.email || "",
+          gender: fetchedData.gender || "",
+          image: fetchedData.image || assets.profile_pic,
+        }));
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
 
-    const data = localStorage.getItem("UserData");
-    if (data) {
-      const parsed = JSON.parse(data);
-      setUserData((prev) => ({
-        ...prev,
-        ...parsed,
-        address: parsed.address || { line1: "", line2: "" },
-      }));
-    }
-  };
+      const data = localStorage.getItem("UserData");
+      if (data) {
+        const parsed = JSON.parse(data);
+        setUserData((prev) => ({
+          ...prev,
+          ...parsed,
+          address: parsed.address || { line1: "", line2: "" },
+        }));
+      }
+    };
 
-  loadData();
-}, []);
+    loadData();
+  }, []);
 
 
   // Save to localStorage on update

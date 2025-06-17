@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { doctors } from "../assets/assets";
 
 
@@ -7,9 +7,18 @@ export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
   const [token, setToken] = useState(false);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  useEffect(() => {
+    const fetchedToken = localStorage.getItem("token")
+
+    if (fetchedToken) {
+      setToken(true)
+    } else {
+      setToken(false)
+    }
+  }, [])
   const value = {
-    doctors, token, setToken, backendUrl
+    doctors, token, setToken
   };
 
   return (
