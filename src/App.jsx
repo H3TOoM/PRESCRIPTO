@@ -14,6 +14,7 @@ import VerifyOTP from "./pages/VerifyOTP";
 import InquiriesBtn from "./components/InquiriesBtn";
 import Inquiries from "./pages/Inquiries";
 import EditAppointment from "./pages/EditAppointment";
+import ForgotPassword2 from "./pages/ForgotPassword2";
 
 
 const App = () => {
@@ -33,6 +34,10 @@ const App = () => {
         <Route path="/Appointment/:docId" element={<Appointment />} />
         <Route path="/inquiries" element={<Inquiries/>}/>
         <Route path="/edit-appointment" element={<EditAppointment/>}/>
+        
+        {/* ForgotPassword2 Routes */}
+        <Route path="/forgot-password2" element={<ForgotPassword2 />} />
+        <Route path="/forgot-password2/:step" element={<ForgotPassword2 />} />
       </Routes>
       <InquiriesBtn/>
       <Footer/>

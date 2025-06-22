@@ -109,6 +109,45 @@ const authService = {
             console.error('Error changing password:', error);
             throw error;
         }
+    },
+
+    // ForgotPassword2 Flow
+    initiateForgotPassword2: async (email) => {
+        try {
+            console.log('authService: Making API call to /initiate-forgot-password2 with email:', email);
+            const response = await axiosInstance.post('/initiate-forgot-password2', { email });
+            console.log('authService: API response received:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error initiating forgot password 2:', error);
+            console.error('Error response:', error.response);
+            throw error;
+        }
+    },
+
+    verifyForgotPassword2Otp: async (email, otp) => {
+        try {
+            const response = await axiosInstance.post('/verify-forgot-password2-otp', { email, otp });
+            return response.data;
+        } catch (error) {
+            console.error('Error verifying forgot password 2 OTP:', error);
+            throw error;
+        }
+    },
+
+    completeForgotPassword2: async (email, resetToken, newPassword, confirmPassword) => {
+        try {
+            const response = await axiosInstance.post('/complete-forgot-password2', {
+                email,
+                resetToken,
+                newPassword,
+                confirmPassword
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error completing forgot password 2:', error);
+            throw error;
+        }
     }
 };
 

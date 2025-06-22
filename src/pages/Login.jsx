@@ -183,7 +183,16 @@ const Login = () => {
           )}
         </div>
 
-
+        {state !== "Sign Up" && (
+          <div className="w-full text-right">
+            <span
+              className="text-blue-400 underline cursor-pointer text-sm"
+              onClick={() => navigate('/forgot-password2')}
+            >
+              Forgot Password?
+            </span>
+          </div>
+        )}
 
         {state === "Sign Up" && (
           <>
