@@ -158,6 +158,16 @@ const authService = {
     googleRegister: async (registrationData) => {
         const response = await axiosInstance.post('/external-auth/google/register', registrationData);
         return response.data;
+    },
+
+    // Notifications
+    getNotifications: async () => {
+        const response = await axiosInstance.get('/notifications');
+        return response.data;
+    },
+    markNotificationAsRead: async (id) => {
+        const response = await axiosInstance.post(`/notifications/read/${id}`);
+        return response.data;
     }
 };
 
