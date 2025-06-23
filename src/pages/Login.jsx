@@ -5,6 +5,7 @@ import authService from "../services/authService";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useAuth } from '../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const { token, setToken } = useContext(AppContext);
@@ -20,6 +21,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const [showGoogleRegistration, setShowGoogleRegistration] = useState(false);
+  const [googleData, setGoogleData] = useState({});
+  const [googleForm, setGoogleForm] = useState({ gender: '', role: '' });
 
   const formik = useFormik({
     initialValues: {
@@ -108,17 +112,95 @@ const Login = () => {
     setError('');
   };
 
-  return (
+  // Handle Google login success
+  const handleGoogleSuccess = async (credentialResponse) => {
+    const idToken = credentialResponse.credential;
+    try {
+      const loginRes = await authService.googleLogin(idToken);
+      if (loginRes.requiresRegistration) {
+        setGoogleData({
+          idToken,
+          firstName: loginRes.firstName,
+          lastName: loginRes.lastName,
+          email: loginRes.email,
+        });
+        setShowGoogleRegistration(true);
+      } else if (loginRes.success) {
+        login(loginRes, loginRes.accessToken);
+        localStorage.setItem('accessToken', loginRes.accessToken);
+        localStorage.setItem('refreshToken', loginRes.refreshToken);
+        navigate('/profile');
+        location.reload();
+      } else {
+        setError(loginRes.message || 'Google login failed');
+      }
+    } catch (err) {
+      setError('Google login failed');
+    }
+  };
+
+  // Handle Google registration form submit
+  const handleGoogleRegister = async (e) => {
+    e.preventDefault();
+    const { idToken } = googleData;
+    const { gender } = googleForm;
+    try {
+      const registerRes = await authService.googleRegister({
+        provider: 'Google',
+        idToken,
+        gender: gender === 'Male' ? 0 : 1,
+        role: 2,
+      });
+      if (registerRes.success) {
+        login(registerRes, registerRes.accessToken);
+        localStorage.setItem('accessToken', registerRes.accessToken);
+        localStorage.setItem('refreshToken', registerRes.refreshToken);
+        navigate('/profile');
+        location.reload();
+      } else {
+        setError(registerRes.message || 'Google registration failed');
+      }
+    } catch (err) {
+      setError('Google registration failed');
+    }
+  };
+
+  return showGoogleRegistration ? (
+    <form onSubmit={handleGoogleRegister} className="min-h-[80vh] flex items-center">
+      <div className="flex flex-col gap-3 m-auto items-start p-5 min-w-[340px] sm:min-w-96 border border-gray-200 rounded-lg text-zinc-600 text-sm shadow-lg">
+        <p className="font-semibold">Complete Registration with Google</p>
+        <input value={googleData.firstName || ''} readOnly placeholder="First Name" className="border rounded w-full p-2 mt-1 bg-gray-100" />
+        <input value={googleData.lastName || ''} readOnly placeholder="Last Name" className="border rounded w-full p-2 mt-1 bg-gray-100" />
+        <input value={googleData.email || ''} readOnly placeholder="Email" className="border rounded w-full p-2 mt-1 bg-gray-100" />
+        <select
+          value={googleForm.gender}
+          onChange={e => setGoogleForm(f => ({ ...f, gender: e.target.value }))}
+          required
+          className="border rounded w-full p-2 mt-1"
+        >
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <input type="hidden" value="Patient" />
+        <button type="submit" className="bg-blue-500 text-white rounded p-2 mt-2">Register with Google</button>
+        <button type="button" className="mt-2 underline text-blue-500" onClick={() => setShowGoogleRegistration(false)}>
+          Cancel
+        </button>
+        {error && (
+          <div className="w-full p-3 text-red-700 bg-red-100 rounded">
+            {error}
+          </div>
+        )}
+      </div>
+    </form>
+  ) : (
     <form onSubmit={formik.handleSubmit} className="min-h-[80vh] flex items-center">
       <div className="flex flex-col gap-3 m-auto items-start p-5 min-w-[340px] sm:min-w-96 border border-gray-200 rounded-lg text-zinc-600 text-sm shadow-lg">
         <p className="text-2xl font-semibold">{state === "Sign Up" ? "Create Account" : "Login"}</p>
         <p>Please {state.toLowerCase()} to book appointment</p>
 
-        {error && (
-          <div className="w-full p-3 text-red-700 bg-red-100 rounded">
-            {error}
-          </div>
-        )}        {state === "Sign Up" && (
+        {state === "Sign Up" && (
           <>
             <div className="w-full">
               <p>First Name</p>
@@ -258,6 +340,15 @@ const Login = () => {
             </span>
           </p>
         )}
+
+        <div className="w-full flex flex-col items-center mt-4">
+          <span className="text-gray-500 mb-2">or</span>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setError('Google Sign-In failed')}
+            width="100%"
+          />
+        </div>
       </div>
     </form>
   );

@@ -148,6 +148,16 @@ const authService = {
             console.error('Error completing forgot password 2:', error);
             throw error;
         }
+    },
+
+    // Google Authentication
+    googleLogin: async (idToken) => {
+        const response = await axiosInstance.post('/external-auth/google', { idToken });
+        return response.data;
+    },
+    googleRegister: async (registrationData) => {
+        const response = await axiosInstance.post('/external-auth/google/register', registrationData);
+        return response.data;
     }
 };
 
