@@ -3,21 +3,41 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
 import RelatedDoctors from "../components/RelatedDoctors";
+import appointmentService from "../services/appointmentService";
+import doctorService from "../services/doctorService";
+import Swal from "sweetalert2";
 
 const Appointment = () => {
   const { docId } = useParams();
   const navigate = useNavigate();
-  const { doctors, token } = useContext(AppContext);
+  const { token } = useContext(AppContext);
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
   const [docInfo, setDocInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);
+  const [bookedSlots, setBookedSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const fetchDocInfo = () => {
-    const doc = doctors.find((doc) => doc._id === docId);
-    setDocInfo(doc);
+  const fetchDocInfo = async () => {
+    try {
+      const doctor = await doctorService.getDoctorById(docId);
+      setDocInfo(doctor);
+    } catch (error) {
+      console.error('Error fetching doctor info:', error);
+      Swal.fire({ title: "Error loading doctor information", icon: "error" });
+    }
+  };
+
+  const fetchBookedSlots = async () => {
+    if (!docId) return;
+    try {
+      const slots = await appointmentService.getDoctorBookedSlots(docId);
+      setBookedSlots(slots);
+    } catch (error) {
+      console.error('Error fetching booked slots:', error);
+    }
   };
 
   const getAvailableSlots = () => {
@@ -65,56 +85,65 @@ const Appointment = () => {
 
   useEffect(() => {
     fetchDocInfo();
-  }, [doctors, docId]);
+  }, [docId]);
 
   useEffect(() => {
-    if (docInfo) getAvailableSlots();
+    if (docInfo) {
+      getAvailableSlots();
+      fetchBookedSlots();
+    }
   }, [docInfo]);
 
-  const bookAppointment = () => {
-    if (token) {
-      if (!slotTime) {
-        Swal.fire({ title: "Please select a time slot first!", icon: "warning" });
-        return;
-      }
-
-      const selectedSlot = docSlots[slotIndex].find((s) => s.time === slotTime);
-
-      if (!selectedSlot) {
-        Swal.fire({ title: "Selected slot not found!", icon: "error" });
-        return;
-      }
-
-      const newBooking = {
-        doctor: docInfo,
-        appointment: {
-          date: selectedSlot.datetime.toDateString(),
-          time: selectedSlot.time,
-          iso: selectedSlot.datetime.toISOString(),
-        },
-      };
-
-      const existingBookings = JSON.parse(localStorage.getItem("selectedAppointments")) || [];
-
-      const isAlreadyBooked = existingBookings.some(
-        (booking) =>
-          booking.doctor._id === newBooking.doctor._id &&
-          booking.appointment.iso === newBooking.appointment.iso
-      );
-
-      if (!isAlreadyBooked) {
-        existingBookings.push(newBooking);
-        localStorage.setItem("selectedAppointments", JSON.stringify(existingBookings));
-
-        Swal.fire({ title: "Booked Successfully!", icon: "success" });
-        setSlotTime('');
-      } else {
-        Swal.fire({ title: "This appointment is already booked.", icon: "info" });
-      }
-    } else {
+  const bookAppointment = async () => {
+    if (!token) {
       Swal.fire({ icon: "error", title: "Oops!", text: "Please Login First" });
       navigate('/login');
+      return;
     }
+
+    if (!slotTime) {
+      Swal.fire({ title: "Please select a time slot first!", icon: "warning" });
+      return;
+    }
+
+    const selectedSlot = docSlots[slotIndex].find((s) => s.time === slotTime);
+
+    if (!selectedSlot) {
+      Swal.fire({ title: "Selected slot not found!", icon: "error" });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const appointmentData = {
+        doctorId: docId,
+        appointmentDate: selectedSlot.datetime.toISOString(),
+        appointmentTime: selectedSlot.time,
+        notes: ""
+      };
+
+      await appointmentService.createAppointment(appointmentData);
+      
+      Swal.fire({ title: "Appointment Booked Successfully!", icon: "success" });
+      setSlotTime('');
+      
+      // Refresh booked slots
+      await fetchBookedSlots();
+    } catch (error) {
+      console.error('Error booking appointment:', error);
+      const errorMessage = error.response?.data?.message || "Failed to book appointment";
+      Swal.fire({ title: "Booking Failed", text: errorMessage, icon: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isSlotBooked = (slot) => {
+    const slotDateTime = slot.datetime.toISOString();
+    return bookedSlots.some(bookedSlot => 
+      new Date(bookedSlot.appointmentDate).toISOString() === slotDateTime
+    );
   };
 
   return (
@@ -123,12 +152,12 @@ const Appointment = () => {
         {/* Doctor Details */}
         <div className="flex flex-col sm:flex-row gap-4">
           <div>
-            <img src={docInfo.image} alt="" className="w-full sm:max-w-72 rounded-lg bg-[#5F6FFF]" />
+            <img src={docInfo.profilePictureUrl || docInfo.image} alt="" className="w-full sm:max-w-72 rounded-lg bg-[#5F6FFF]" />
           </div>
 
           <div className="flex-1 border border-gray-400 rounded-lg p-8 bg-gray-50 ml-2 sm:ml-0 mt-[-80px] sm:mt-0">
             <p className="flex items-center gap-2 text-2xl font-semibold text-gray-900">
-              {docInfo.name}
+              {docInfo.fullName || docInfo.name}
               <img src={assets.verified_icon} alt="" className="w-5" />
             </p>
             <div className="flex items-center gap-2 text-sm mt-1 text-gray-600">
@@ -182,14 +211,7 @@ const Appointment = () => {
           <div className="flex items-center gap-3 w-full overflow-x-auto mt-5">
             {docSlots.length &&
               docSlots[slotIndex].map((slot, index) => {
-                // Check if slot is booked
-                const existingBookings = JSON.parse(localStorage.getItem("selectedAppointments")) || [];
-
-                const isBooked = existingBookings.some(
-                  (booking) =>
-                    booking.doctor._id === docInfo._id &&
-                    booking.appointment.iso === slot.datetime.toISOString()
-                );
+                const isBooked = isSlotBooked(slot);
 
                 return (
                   <div
@@ -213,10 +235,10 @@ const Appointment = () => {
 
           <button
             onClick={bookAppointment}
-            disabled={!slotTime}
+            disabled={!slotTime || loading}
             className="text-gray-50 text-sm px-14 py-3 rounded-full mt-8 disabled:bg-gray-400 disabled:cursor-not-allowed 
             bg-[#5F6FFF] hover:shadow-md hover:shadow-[#5F6FFF]/50 transition-all duration-500 disabled:opacity-50 disabled:hover:shadow-none disabled:hover:bg-gray-400 disabled:hover:text-gray-50">
-            Book an Appointment
+            {loading ? "Booking..." : "Book an Appointment"}
           </button>
         </div>
 

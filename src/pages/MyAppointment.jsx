@@ -1,20 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import appointmentService from "../services/appointmentService";
+import Swal from "sweetalert2";
 
 const MyAppointment = () => {
   const [appointments, setAppointments] = useState([]);
-
+  const [loading, setLoading] = useState(true);
+  const { token } = useContext(AppContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const stored = localStorage.getItem("selectedAppointments");
+  const fetchAppointments = async () => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
-    setAppointments(JSON.parse(stored) || []);
-  }, []);
+    try {
+      const data = await appointmentService.getAllAppointments();
+      setAppointments(data);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+      Swal.fire({ title: "Error loading appointments", icon: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [token]);
 
   // cancel appointment function
-  const handleCancelAppointment = (index) => {
-    Swal.fire({
+  const handleCancelAppointment = async (appointmentId) => {
+    const result = await Swal.fire({
       title: "Are you sure you want to cancel this appointment?",
       icon: "warning",
       showCancelButton: true,
@@ -22,19 +41,54 @@ const MyAppointment = () => {
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, cancel it!",
       cancelButtonText: "No"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedAppointments = [...appointments];
-        updatedAppointments.splice(index, 1);
-        localStorage.setItem("selectedAppointments", JSON.stringify(updatedAppointments));
-
-        setAppointments(updatedAppointments);
-
-        Swal.fire("Cancelled!", "Your appointment has been cancelled.", "success");
-
-      }
     });
+
+    if (result.isConfirmed) {
+      try {
+        await appointmentService.deleteAppointment(appointmentId);
+        
+        // Remove from local state
+        setAppointments(prev => prev.filter(app => app.id !== appointmentId));
+        
+        Swal.fire("Cancelled!", "Your appointment has been cancelled.", "success");
+      } catch (error) {
+        console.error('Error cancelling appointment:', error);
+        const errorMessage = error.response?.data?.message || "Failed to cancel appointment";
+        Swal.fire({ title: "Cancellation Failed", text: errorMessage, icon: "error" });
+      }
+    }
   };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
+
+  const formatTime = (timeString) => {
+    return timeString;
+  };
+
+  if (loading) {
+    return (
+      <div className="p-4">
+        <p className="p-3 mt-12 font-semibold text-zinc-900 border-b border-gray-300">
+          My appointments
+        </p>
+        <div className="p-4 text-gray-500">Loading appointments...</div>
+      </div>
+    );
+  }
+
+  if (!token) {
+    return (
+      <div className="p-4">
+        <p className="p-3 mt-12 font-semibold text-zinc-900 border-b border-gray-300">
+          My appointments
+        </p>
+        <div className="p-4 text-gray-500">Please login to view your appointments.</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -45,40 +99,50 @@ const MyAppointment = () => {
         <p className="p-4 text-gray-500">No appointments found.</p>
       )}
 
-      {appointments.map((item, index) => (
+      {appointments.map((appointment) => (
         <div
-          key={index}
+          key={appointment.id}
           className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 p-4 border-b border-gray-300 rounded-md shadow-md hover:shadow-lg transition-shadow duration-500"
         >
           <div className="p-3">
-            <img src={item.doctor.image} alt="" className="w-32 rounded-md" />
+            <img 
+              src={appointment.doctor?.profilePictureUrl || appointment.doctor?.image} 
+              alt="" 
+              className="w-32 rounded-md" 
+            />
           </div>
           <div className="flex-1 text-sm text-zinc-600">
             <p className="text-neutral-800 font-semibold mt-2">
-              {item.doctor.name}
+              {appointment.doctor?.fullName || appointment.doctor?.name}
             </p>
-            <p>{item.doctor.speciality}</p>
+            <p>{appointment.doctor?.speciality}</p>
             <p className="text-zinc-700 font-semibold mt-1">Address : </p>
-            <p className="text-xs">{item.doctor.address?.line1}</p>
-            <p className="text-xs">{item.doctor.address?.line2}</p>
+            <p className="text-xs">{appointment.doctor?.address?.line1}</p>
+            <p className="text-xs">{appointment.doctor?.address?.line2}</p>
             <p className="text-sm mt-1 mb-2">
               <span className="text-sm text-neutral-700 font-semibold">
                 Date & Time:{" "}
               </span>
-              {item.appointment.date} | {item.appointment.time}
+              {formatDate(appointment.appointmentDate)} | {formatTime(appointment.appointmentTime)}
             </p>
+            {appointment.notes && (
+              <p className="text-sm mt-1">
+                <span className="text-neutral-700 font-semibold">Notes: </span>
+                {appointment.notes}
+              </p>
+            )}
           </div>
           <div className="flex flex-col gap-2 justify-end font-semibold items-center">
             <button
               className="text-sm text-gray-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5F6FFF] hover:text-gray-50 transition-all duration-500"
               onClick={() =>
-                navigate('/edit-appointment', { state: { item, index } })
+                navigate('/edit-appointment', { state: { appointment } })
               }
             >
               Edit Appointment
             </button>
             <button
-              onClick={() => handleCancelAppointment(index)}
+              onClick={() => handleCancelAppointment(appointment.id)}
               className="text-sm text-gray-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-500 hover:text-gray-50 transition-all duration-500">
               Cancel Appointment
             </button>

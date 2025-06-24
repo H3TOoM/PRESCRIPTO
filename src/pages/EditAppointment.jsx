@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import appointmentService from "../services/appointmentService";
+import Swal from "sweetalert2";
 
 const availableTimes = [
     "09:00",
@@ -22,45 +25,45 @@ const availableTimes = [
 const EditAppointment = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { token } = useContext(AppContext);
 
-    const [item] = useState(location.state.item);
-    const [selectedTime, setSelectedTime] = useState(item.appointment.time);
-    const [selectedDate, setSelectedDate] = useState(item.appointment.date);
-    const [filteredTimes, setFilteredTimes] = useState(availableTimes);
+    const [appointment] = useState(location.state.appointment);
+    const [selectedTime, setSelectedTime] = useState(appointment.appointmentTime);
+    const [selectedDate, setSelectedDate] = useState(appointment.appointmentDate.split('T')[0]);
+    const [notes, setNotes] = useState(appointment.notes || "");
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        // Filter available times based on the selected date
-        const appointments = JSON.parse(localStorage.getItem("selectedAppointments")) || [];
+    if (!token) {
+        navigate('/login');
+        return null;
+    }
 
-        // Exclude the current appointment
-        const otherAppointments = appointments.filter((_, idx) => idx !== location.state.index);
+    const handleSave = async () => {
+        if (!selectedTime) {
+            Swal.fire({ title: "Please select a time", icon: "warning" });
+            return;
+        }
 
-        // Gather reserved slots for the selected date
-        const reserved = otherAppointments
-            .filter((item) => item.appointment.date === selectedDate)
-            .map((item) => item.appointment.time);
+        setLoading(true);
 
-        // Filter out reserved slots
-        setFilteredTimes(availableTimes.filter((time) => !reserved.includes(time)));
-    }, [selectedDate, item, location.state.index]);
+        try {
+            const appointmentData = {
+                appointmentDate: new Date(selectedDate + 'T' + selectedTime).toISOString(),
+                appointmentTime: selectedTime,
+                notes: notes
+            };
 
-    const handleSave = () => {
-        // Store updated appointment in LocalStorage
-        const appointments = JSON.parse(localStorage.getItem("selectedAppointments")) || [];
+            await appointmentService.updateAppointment(appointment.id, appointmentData);
 
-        appointments[location.state.index] = {
-            ...item,
-            appointment: {
-                date: selectedDate,
-                time: selectedTime,
-            },
-        };
-
-        localStorage.setItem("selectedAppointments", JSON.stringify(appointments));
-
-        Swal.fire("Success!", "Appointment updated.", "success");
-
-        navigate('/My-Appointment');
+            Swal.fire("Success!", "Appointment updated.", "success");
+            navigate('/My-Appointment');
+        } catch (error) {
+            console.error('Error updating appointment:', error);
+            const errorMessage = error.response?.data?.message || "Failed to update appointment";
+            Swal.fire({ title: "Update Failed", text: errorMessage, icon: "error" });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -68,13 +71,17 @@ const EditAppointment = () => {
             <h2 className="text-3xl font-semibold mb-6 text-gray-500">Edit Appointment</h2>
 
             <div className="flex items-center gap-6 mb-6 p-6 rounded-md shadow-inner">
-                <img src={item.doctor.image} alt="doctor" className="w-48 rounded-md shadow-md" />
+                <img 
+                    src={appointment.doctor?.profilePictureUrl || appointment.doctor?.image} 
+                    alt="doctor" 
+                    className="w-48 rounded-md shadow-md" 
+                />
                 <div className="flex-1">
                     <p className="text-gray-500 font-semibold text-2xl">
-                        {item.doctor.name}
+                        {appointment.doctor?.fullName || appointment.doctor?.name}
                     </p>
                     <p className="text-gray-500 mt-2">
-                        {item.doctor.speciality}
+                        {appointment.doctor?.speciality}
                     </p>
                 </div>
             </div>
@@ -102,28 +109,37 @@ const EditAppointment = () => {
                     value={selectedTime}
                     onChange={(e) => setSelectedTime(e.target.value)}
                 >
-                    {filteredTimes.length > 0 ? (
-                        filteredTimes.map((time, index) => (
-                            <option key={index} value={time}>
-                                {time}
-                            </option>
-                        ))
-                    ) : (
-                        <option disabled>Not available</option>
-                    )}
-
+                    {availableTimes.map((time, index) => (
+                        <option key={index} value={time}>
+                            {time}
+                        </option>
+                    ))}
                 </select>
+            </div>
+
+            <div className="mb-4">
+                <label htmlFor="notes" className="block font-semibold mb-2 uppercase text-gray-500">
+                    Notes (Optional)
+                </label>
+                <textarea
+                    id="notes"
+                    className="border border-gray-200 p-3 rounded-md w-full shadow-md focus:outline-none focus:ring-2 focus:ring-[#5F6FFF] text-gray-400"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    rows="3"
+                    placeholder="Add any notes for your appointment..."
+                />
             </div>
 
             <div className="flex gap-4">
                 <button
                     onClick={handleSave}
-                    disabled={!selectedTime}
+                    disabled={!selectedTime || loading}
                     className={`${
-                        !selectedTime ? "bg-gray-400 cursor-not-allowed" : "bg-[#5F6FFF] hover:bg-[#4E5ACC]"
+                        !selectedTime || loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5F6FFF] hover:bg-[#4E5ACC]"
                     } text-gray-50 py-3 px-6 rounded-md font-semibold shadow-md transition ease-in-out duration-500`}
                 >
-                    Save Appointment
+                    {loading ? "Saving..." : "Save Appointment"}
                 </button>
 
                 <button
