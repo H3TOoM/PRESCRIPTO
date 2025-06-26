@@ -83,6 +83,17 @@ const appointmentService = {
             console.error('Error fetching doctor booked slots:', error);
             throw error;
         }
+    },
+
+    // Get cancelled appointments for the current user
+    getCancelledAppointments: async () => {
+        try {
+            const response = await axiosInstance.get('/appointments/cancelled');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching cancelled appointments:', error);
+            throw error;
+        }
     }
 };
 
