@@ -9,7 +9,6 @@ import { useTranslation } from "react-i18next";
 const TopDoctor = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  // const {doctors} = useContext(AppContext);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,7 +57,6 @@ const TopDoctor = () => {
         {t("topdoctor_more")}
       </button>
     </div>
-
   );
 };
 

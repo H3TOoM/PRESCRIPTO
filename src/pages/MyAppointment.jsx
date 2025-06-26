@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 
 const MyAppointment = () => {
   const [appointments, setAppointments] = useState([]);
+  const [cancelledAppointments, setCancelledAppointments] = useState([]);
+  const [showCancelled, setShowCancelled] = useState(false);
   const [loading, setLoading] = useState(true);
   const { token } = useContext(AppContext);
   const navigate = useNavigate();
@@ -19,6 +21,9 @@ const MyAppointment = () => {
     try {
       const data = await appointmentService.getAllAppointments();
       setAppointments(data);
+      // Fetch cancelled appointments as well
+      const cancelled = await appointmentService.getCancelledAppointments();
+      setCancelledAppointments(cancelled);
     } catch (error) {
       console.error('Error fetching appointments:', error);
       Swal.fire({ title: "Error loading appointments", icon: "error" });
@@ -106,19 +111,18 @@ const MyAppointment = () => {
         >
           <div className="p-3">
             <img 
-              src={appointment.doctor?.profilePictureUrl || appointment.doctor?.image} 
+              src={appointment.doctorImage} 
               alt="" 
               className="w-32 rounded-md" 
             />
           </div>
           <div className="flex-1 text-sm text-zinc-600">
             <p className="text-neutral-800 font-semibold mt-2">
-              {appointment.doctor?.fullName || appointment.doctor?.name}
+              {appointment.doctorName}
             </p>
-            <p>{appointment.doctor?.speciality}</p>
+            <p>{appointment.doctorSpeciality}</p>
             <p className="text-zinc-700 font-semibold mt-1">Address : </p>
-            <p className="text-xs">{appointment.doctor?.address?.line1}</p>
-            <p className="text-xs">{appointment.doctor?.address?.line2}</p>
+            <p className="text-xs">{appointment.doctorAddress}</p>
             <p className="text-sm mt-1 mb-2">
               <span className="text-sm text-neutral-700 font-semibold">
                 Date & Time:{" "}
@@ -152,6 +156,58 @@ const MyAppointment = () => {
           </div>
         </div>
       ))}
+
+      {/* Collapsible Cancelled Appointments Section */}
+      <div className="mt-8">
+        <button
+          onClick={() => setShowCancelled(v => !v)}
+          className="flex items-center gap-2 px-4 py-2 border rounded bg-gray-100 hover:bg-gray-200 font-semibold text-gray-700"
+        >
+          {showCancelled ? "▼" : "►"} Show Cancelled Appointments
+        </button>
+        {showCancelled && (
+          <div className="mt-4">
+            {cancelledAppointments.length === 0 ? (
+              <p className="text-gray-500">No cancelled appointments.</p>
+            ) : (
+              cancelledAppointments.map((appointment) => (
+                <div
+                  key={appointment.id}
+                  className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 p-4 border-b border-gray-200 rounded-md bg-red-50"
+                >
+                  <div className="p-3">
+                    <img 
+                      src={appointment.doctorImage} 
+                      alt="" 
+                      className="w-32 rounded-md" 
+                    />
+                  </div>
+                  <div className="flex-1 text-sm text-zinc-600">
+                    <p className="text-neutral-800 font-semibold mt-2">
+                      {appointment.doctorName}
+                    </p>
+                    <p>{appointment.doctorSpeciality}</p>
+                    <p className="text-zinc-700 font-semibold mt-1">Address : </p>
+                    <p className="text-xs">{appointment.doctorAddress}</p>
+                    <p className="text-sm mt-1 mb-2">
+                      <span className="text-sm text-neutral-700 font-semibold">
+                        Date & Time:{" "}
+                      </span>
+                      {formatDate(appointment.appointmentDate)} | {formatTime(appointment.appointmentTime)}
+                    </p>
+                    {appointment.notes && (
+                      <p className="text-sm mt-1">
+                        <span className="text-neutral-700 font-semibold">Notes: </span>
+                        {appointment.notes}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
