@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import doctorService from "../services/doctorService";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 const Doctors = () => {
+  const { t } = useTranslation();
   const { speciality } = useParams();
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
@@ -66,15 +68,15 @@ const Doctors = () => {
   if (loading) {
     return (
       <div className="p-4">
-        <p className="text-gray-600">Browse through the doctors specialist.</p>
-        <div className="p-4 text-gray-500">Loading doctors...</div>
+        <p className="text-gray-600">{t("doctors_browse")}</p>
+        <div className="p-4 text-gray-500">{t("doctors_loading")}</div>
       </div>
     );
   }
 
   return (
     <div>
-      <p className="text-gray-600">Browse through the doctors specialist.</p>
+      <p className="text-gray-600">{t("doctors_browse")}</p>
       <div className="flex flex-col sm:flex-row items-strat gap-5 mt-5">
         <div className="flex flex-col gap-4 text-sm text-gray-600">
           {/* All Doctors */}
@@ -84,7 +86,7 @@ const Doctors = () => {
               !speciality ? "bg-indigo-100 text-black" : ""
             }`}
           >
-            All Specialties
+            {t("doctors_all_specialties")}
           </p>
           
           {/* Dynamic Specialty Filters */}
@@ -100,7 +102,7 @@ const Doctors = () => {
                 speciality === specialty ? "bg-indigo-100 text-black" : ""
               }`}
             >
-              {specialty}
+              {t(`speciality_${specialty}`) || specialty}
             </p>
           ))}
         </div>
@@ -108,7 +110,7 @@ const Doctors = () => {
         <div className="w-full grid gap-4 gap-y-6 top-doctor-container">
           {filteredDoctors.length === 0 ? (
             <div className="col-span-full text-center py-8 text-gray-500">
-              No doctors found for this specialty.
+              {t("doctors_no_found")}
             </div>
           ) : (
             filteredDoctors.map((doctor, index) => (
@@ -125,12 +127,12 @@ const Doctors = () => {
                 <div className="p-4">
                   <div className="flex items-center gap-2 text-sm text-center text-green-500">
                     <p className="w-2 h-2 bg-green-500 rounded-full"></p>
-                    <p>Available</p>
+                    <p>{t("doctors_available")}</p>
                   </div>
                   <p className="text-gray-900 text-lg font-medium">
                     {doctor.fullName || doctor.name}
                   </p>
-                  <p className="text-gray-600 text-xs">{doctor.speciality}</p>
+                  <p className="text-gray-600 text-xs">{t(`speciality_${doctor.speciality}`) || doctor.speciality}</p>
                   {doctor.degree && (
                     <p className="text-gray-500 text-xs mt-1">{doctor.degree}</p>
                   )}

@@ -15,9 +15,15 @@ import InquiriesBtn from "./components/InquiriesBtn";
 import Inquiries from "./pages/Inquiries";
 import EditAppointment from "./pages/EditAppointment";
 import ForgotPassword2 from "./pages/ForgotPassword2";
-
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 const App = () => {
+  const { t, i18n } = useTranslation();
+  useEffect(() => {
+    document.body.dir = i18n.language === "ar" ? "rtl" : "ltr";
+  }, [i18n.language]);
+
   return (
     <div className="mx-4 sm:mx-[10%]">
       <Navbar />

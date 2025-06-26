@@ -6,12 +6,14 @@ import RelatedDoctors from "../components/RelatedDoctors";
 import appointmentService from "../services/appointmentService";
 import doctorService from "../services/doctorService";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 const Appointment = () => {
   const { docId } = useParams();
   const navigate = useNavigate();
   const { token } = useContext(AppContext);
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  const { t } = useTranslation();
 
   const [docInfo, setDocInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);
@@ -26,7 +28,7 @@ const Appointment = () => {
       setDocInfo(doctor);
     } catch (error) {
       console.error('Error fetching doctor info:', error);
-      Swal.fire({ title: "Error loading doctor information", icon: "error" });
+      Swal.fire({ title: t("appointment_error_loading_doctor"), icon: "error" });
     }
   };
 
@@ -96,20 +98,20 @@ const Appointment = () => {
 
   const bookAppointment = async () => {
     if (!token) {
-      Swal.fire({ icon: "error", title: "Oops!", text: "Please Login First" });
+      Swal.fire({ icon: "error", title: t("appointment_oops"), text: t("appointment_login_first") });
       navigate('/login');
       return;
     }
 
     if (!slotTime) {
-      Swal.fire({ title: "Please select a time slot first!", icon: "warning" });
+      Swal.fire({ title: t("appointment_select_time_first"), icon: "warning" });
       return;
     }
 
     const selectedSlot = docSlots[slotIndex].find((s) => s.time === slotTime);
 
     if (!selectedSlot) {
-      Swal.fire({ title: "Selected slot not found!", icon: "error" });
+      Swal.fire({ title: t("appointment_slot_not_found"), icon: "error" });
       return;
     }
 
@@ -125,15 +127,15 @@ const Appointment = () => {
 
       await appointmentService.createAppointment(appointmentData);
       
-      Swal.fire({ title: "Appointment Booked Successfully!", icon: "success" });
+      Swal.fire({ title: t("appointment_booked_success"), icon: "success" });
       setSlotTime('');
       
       // Refresh booked slots
       await fetchBookedSlots();
     } catch (error) {
       console.error('Error booking appointment:', error);
-      const errorMessage = error.response?.data?.message || "Failed to book appointment";
-      Swal.fire({ title: "Booking Failed", text: errorMessage, icon: "error" });
+      const errorMessage = error.response?.data?.message || t("appointment_failed_to_book");
+      Swal.fire({ title: t("appointment_booking_failed"), text: errorMessage, icon: "error" });
     } finally {
       setLoading(false);
     }
@@ -171,7 +173,7 @@ const Appointment = () => {
 
             <div>
               <p className="flex items-center gap-1 text-sm font-semibold text-gray-900 mt-3">
-                About <img src={assets.info_icon} alt="" />
+                {t("appointment_about")} <img src={assets.info_icon} alt="" />
               </p>
               <p className="text-sm text-gray-500 max-w-[700px] mt-1">
                 {docInfo.about}
@@ -179,14 +181,14 @@ const Appointment = () => {
             </div>
 
             <p className="text-gray-500 font-semibold mt-4">
-              Appointment fee : <span className="text-gray-600">${docInfo.fees}</span>
+              {t("appointment_fee")} : <span className="text-gray-600">${docInfo.fees}</span>
             </p>
           </div>
         </div>
 
         {/* Booking Slots */}
         <div className="sm:ml-72 mt-4 font-semibold text-gray-700">
-          <p className="mt-5 text-lg font-semibold">Booking Slots</p>
+          <p className="mt-5 text-lg font-semibold">{t("appointment_booking_slots")}</p>
 
           {/* Day picker */}
           <div className="flex gap-3 items-center w-full overflow-x-auto mt-4">
@@ -201,7 +203,7 @@ const Appointment = () => {
                       : "border border-gray-200 text-gray-500"
                     }`}
                 >
-                  <p>{daySlots[0] && daysOfWeek[daySlots[0].datetime.getDay()]}</p>
+                  <p>{daySlots[0] && t(`appointment_day_${daysOfWeek[daySlots[0].datetime.getDay()].toLowerCase()}`)}</p>
                   <p>{daySlots[0] && daySlots[0].datetime.getDate()}</p>
                 </div>
               ))}
@@ -238,7 +240,7 @@ const Appointment = () => {
             disabled={!slotTime || loading}
             className="text-gray-50 text-sm px-14 py-3 rounded-full mt-8 disabled:bg-gray-400 disabled:cursor-not-allowed 
             bg-[#5F6FFF] hover:shadow-md hover:shadow-[#5F6FFF]/50 transition-all duration-500 disabled:opacity-50 disabled:hover:shadow-none disabled:hover:bg-gray-400 disabled:hover:text-gray-50">
-            {loading ? "Booking..." : "Book an Appointment"}
+            {loading ? t("appointment_booking_loading") : t("appointment_book_button")}
           </button>
         </div>
 

@@ -1,14 +1,15 @@
 import React from "react";
 import { specialityData } from "../assets/assets";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SpecialityMenu = () => {
+  const { t } = useTranslation();
   return (
     <div id="speciality" className="flex flex-col items-center gap-6 py-20 text-gray-800 m-15">
-      <h1 className="text-4xl font-bold">Find by Speciality</h1>
+      <h1 className="text-4xl font-bold">{t("speciality_title")}</h1>
       <p className="sm:w-1/3 text-center text-lg font-medium">
-        Simply browse through our extensive list of trusted doctors, schedule
-        your appointment hassle-free.
+        {t("speciality_subtitle")}
       </p>
       <div className="flex sm:justify-center gap-6 pt-8 w-full flex-wrap">
         {specialityData.map((item , index) => (
@@ -27,10 +28,10 @@ const SpecialityMenu = () => {
                   )}
                 </div>
                 <button
-                  className="text-lg font-semibold px-6 py-2 rounded-full bg-[#5F6FFF] text-white shadow hover:bg-[#4a56d6] transition-all duration-300 border-none outline-none"
+                  className="text-md font-semibold px-6 py-2 rounded-full bg-[#5F6FFF] text-white shadow hover:bg-[#4a56d6] transition-all duration-300 border-none outline-none"
                   style={{minWidth: '160px'}}
                 >
-                  {item.speciality}
+                  {t(`speciality_${item.speciality}`)}
                 </button>
             </Link>
         ))}
@@ -39,4 +40,4 @@ const SpecialityMenu = () => {
   );
 };
 
-export default SpecialityMenu;
+export default SpecialityMenu;

@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { currentUser, token, logout: authLogout, loading } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
+  const { i18n, t } = useTranslation();
 
   const logout = () => {
     authLogout();
@@ -22,19 +24,19 @@ const Navbar = () => {
       />
       <ul className="hidden md:flex items-start gap-5 font-medium">
         <NavLink to="/">
-          <li className="py-1">HOME</li>
+          <li className="py-1">{t("nav_home")}</li>
           <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
         <NavLink to="/doctors">
-          <li className="py-1">ALL DOCTORS</li>
+          <li className="py-1">{t("nav_doctors")}</li>
           <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
         <NavLink to="/about">
-          <li className="py-1">ABOUT</li>
+          <li className="py-1">{t("nav_about")}</li>
           <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
         <NavLink to="/contact">
-          <li className="py-1">CONTACT</li>
+          <li className="py-1">{t("nav_contact")}</li>
           <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
       </ul>
@@ -58,16 +60,16 @@ const Navbar = () => {
                   onClick={() => navigate("/profile")}
                   className="hover:text-black cursor-pointer"
                 >
-                  My Profile
+                  {t("nav_profile")}
                 </p>
                 <p
                   onClick={() => navigate("/My-Appointment")}
                   className="hover:text-black cursor-pointer"
                 >
-                  My Appointments
+                  {t("nav_appointments")}
                 </p>
                 <p onClick={logout} className="hover:text-black cursor-pointer">
-                  Logout
+                  {t("nav_logout")}
                 </p>
               </div>
             </div>
@@ -77,9 +79,16 @@ const Navbar = () => {
             onClick={() => navigate("/login")}
             className="bg-[#5F6FFF] text-white px-8 py-3 rounded-full font-light hidden md:block"
           >
-            Create account
+            {t("nav_create_account")}
           </button>
         )}
+        <button
+          onClick={() => i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")}
+          className="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
+          title="Change Language"
+        >
+          <span role="img" aria-label="language">🌐</span>
+        </button>
         <assets.menu_icon
           onClick={() => setShowMenu(true)}
           className="w-6 md:hidden"
@@ -101,16 +110,16 @@ const Navbar = () => {
           </div>
           <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium">
             <NavLink onClick={() => setShowMenu(false)} to="/">
-              <p className="px-4 py-2 rounded inline-block">HOME</p>
+              <p className="px-4 py-2 rounded inline-block">{t("nav_home")}</p>
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/doctors">
-              <p className="px-4 py-2 rounded inline-block">ALL DOCTORS</p>
+              <p className="px-4 py-2 rounded inline-block">{t("nav_doctors")}</p>
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/about">
-              <p className="px-4 py-2 rounded inline-block">ABOUT</p>
+              <p className="px-4 py-2 rounded inline-block">{t("nav_about")}</p>
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/contact">
-              <p className="px-4 py-2 rounded inline-block">CONTACT</p>
+              <p className="px-4 py-2 rounded inline-block">{t("nav_contact")}</p>
             </NavLink>
           </ul>
         </div>

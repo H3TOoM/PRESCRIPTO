@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import doctorService from "../services/doctorService";
+import { useTranslation } from "react-i18next";
 
 const RelatedDoctors = ({ docId, speciality }) => {
   const navigate = useNavigate();
   const [relatedDoctors, setRelatedDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchRelatedDoctors = async () => {
@@ -33,12 +35,12 @@ const RelatedDoctors = ({ docId, speciality }) => {
   if (loading) {
     return (
       <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
-        <h1 className="text-3xl font-medium">Related Doctors</h1>
+        <h1 className="text-3xl font-medium">{t("related_doctors_title")}</h1>
         <p className="sm:w-1/3 text-center text-sm">
-          Simply browse through our extensive list of trusted doctors.
+          {t("related_doctors_subtitle")}
         </p>
         <div className="w-full text-center py-8 text-gray-500">
-          Loading related doctors...
+          {t("related_doctors_loading")}
         </div>
       </div>
     );
@@ -50,9 +52,9 @@ const RelatedDoctors = ({ docId, speciality }) => {
 
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
-      <h1 className="text-3xl font-medium">Related Doctors</h1>
+      <h1 className="text-3xl font-medium">{t("related_doctors_title")}</h1>
       <p className="sm:w-1/3 text-center text-sm">
-        Simply browse through our extensive list of trusted doctors.
+        {t("related_doctors_subtitle")}
       </p>
       <div className="w-full grid gap-3 pt-5 g-y-6 px-3 sm:px-0 top-doctor-container">
         {relatedDoctors.slice(0, 5).map((doctor, index) => (
@@ -67,12 +69,12 @@ const RelatedDoctors = ({ docId, speciality }) => {
             <img 
               src={doctor.profilePictureUrl || doctor.image} 
               alt="" 
-              className="bg-blue-50 blur-sm" 
+              className="bg-blue-50" 
             />
             <div className="p-4">
               <div className="flex items-center gap-2 text-sm text-center text-green-500">
                 <p className="w-2 h-2 bg-green-500 rounded-full"></p>
-                <p>Available</p>
+                <p>{t("related_doctors_available")}</p>
               </div>
               <p className="text-gray-900 text-lg font-medium">
                 {doctor.fullName || doctor.name}
