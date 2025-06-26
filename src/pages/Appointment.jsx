@@ -214,21 +214,23 @@ const Appointment = () => {
                 const isBooked = isSlotBooked(slot);
 
                 return (
-                  <div
+                  <button
                     key={index}
+                    disabled={isBooked}
                     onClick={() => {
                       if (!isBooked) setSlotTime(slot.time);
                     }}
                     className={`flex text-sm font-light px-8 items-center rounded-full border border-gray-200 
                         ${isBooked
-                        ? "bg-red-500 text-gray-50 cursor-not-allowed opacity-50"
+                        ? "bg-red-500 text-gray-50 cursor-not-allowed opacity-70 border-2 border-red-500"
                         : "cursor-pointer hover:bg-[#5F6FFF] hover:text-gray-50 transition ease-in-out duration-500"
                       }
                         ${slot.time === slotTime ? "bg-[#5F6FFF] text-gray-50 shadow-md shadow-[#5F6FFF]/50" : ""}
                         `}
+                    title={isBooked ? "This slot is already booked" : "Book this slot"}
                   >
                     {slot.time.toUpperCase()}
-                  </div>
+                  </button>
                 )
               })}
           </div>

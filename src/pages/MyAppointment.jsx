@@ -106,19 +106,18 @@ const MyAppointment = () => {
         >
           <div className="p-3">
             <img 
-              src={appointment.doctor?.profilePictureUrl || appointment.doctor?.image} 
+              src={appointment.doctorImage} 
               alt="" 
               className="w-32 rounded-md" 
             />
           </div>
           <div className="flex-1 text-sm text-zinc-600">
             <p className="text-neutral-800 font-semibold mt-2">
-              {appointment.doctor?.fullName || appointment.doctor?.name}
+              {appointment.doctorName}
             </p>
-            <p>{appointment.doctor?.speciality}</p>
+            <p>{appointment.doctorSpeciality}</p>
             <p className="text-zinc-700 font-semibold mt-1">Address : </p>
-            <p className="text-xs">{appointment.doctor?.address?.line1}</p>
-            <p className="text-xs">{appointment.doctor?.address?.line2}</p>
+            <p className="text-xs">{appointment.doctorAddress}</p>
             <p className="text-sm mt-1 mb-2">
               <span className="text-sm text-neutral-700 font-semibold">
                 Date & Time:{" "}

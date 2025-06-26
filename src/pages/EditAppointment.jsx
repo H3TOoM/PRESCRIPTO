@@ -72,16 +72,19 @@ const EditAppointment = () => {
 
             <div className="flex items-center gap-6 mb-6 p-6 rounded-md shadow-inner">
                 <img 
-                    src={appointment.doctor?.profilePictureUrl || appointment.doctor?.image} 
+                    src={appointment.doctorImage} 
                     alt="doctor" 
                     className="w-48 rounded-md shadow-md" 
                 />
                 <div className="flex-1">
                     <p className="text-gray-500 font-semibold text-2xl">
-                        {appointment.doctor?.fullName || appointment.doctor?.name}
+                        {appointment.doctorName}
                     </p>
                     <p className="text-gray-500 mt-2">
-                        {appointment.doctor?.speciality}
+                        {appointment.doctorSpeciality}
+                    </p>
+                    <p className="text-gray-500 mt-2">
+                        {appointment.doctorAddress}
                     </p>
                 </div>
             </div>
