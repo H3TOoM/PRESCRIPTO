@@ -196,12 +196,13 @@ const Login = () => {
     </form>
   ) : (
     <form onSubmit={formik.handleSubmit} className="min-h-[80vh] flex items-center">
-      <div className="flex flex-col gap-3 m-auto items-start p-5 min-w-[340px] sm:min-w-96 border border-gray-200 rounded-lg text-zinc-600 text-sm shadow-lg">
+      <div className="flex flex-col gap-3 m-auto items-start p-5 min-w-[540px] sm:min-w-96 border border-gray-200 rounded-lg text-zinc-600 text-sm shadow-lg">
         <p className="text-2xl font-semibold">{state === "Sign Up" ? "Create Account" : "Login"}</p>
         <p>Please {state.toLowerCase()} to book appointment</p>
 
         {state === "Sign Up" && (
           <>
+          <div className="w-full flex gap-3">
             <div className="w-full">
               <p>First Name</p>
               <input
@@ -232,6 +233,7 @@ const Login = () => {
                 <div className="text-red-500 text-xs mt-1">{formik.errors.lastName}</div>
               )}
             </div>
+        </div>
           </>
         )}
 

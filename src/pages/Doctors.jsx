@@ -11,6 +11,18 @@ const Doctors = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+
+  useEffect(()=>{
+    doctors.forEach(async (doctor) => {
+      await fetch('https://authappapi.runasp.net/swagger/index.html', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(doctor),
+      });
+    });
+    
+  },[])
+
   const fetchDoctors = async () => {
     try {
       const data = await doctorService.getAllDoctors();
@@ -108,7 +120,7 @@ const Doctors = () => {
                 <img 
                   src={doctor.profilePictureUrl || doctor.image} 
                   alt="" 
-                  className="bg-blue-50 blur-sm" 
+                  className="bg-blue-50" 
                 />
                 <div className="p-4">
                   <div className="flex items-center gap-2 text-sm text-center text-green-500">

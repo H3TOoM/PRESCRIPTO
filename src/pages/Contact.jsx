@@ -14,7 +14,7 @@ const Contact = () => {
         <img
           src={assets.contact_image}
           alt=""
-          className="w-full md:max-w-[360px] blur-sm"
+          className="w-full md:max-w-[360px]"
         />
 
         <div className="flex flex-col justify-center items-start gap-6">

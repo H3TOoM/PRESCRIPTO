@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { doctors } from "../assets/assets";
-
+import {doctors} from "../assets/doctorsData"
 
 export const AppContext = createContext();
 
