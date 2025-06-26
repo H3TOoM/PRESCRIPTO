@@ -17,11 +17,18 @@ const SpecialityMenu = () => {
               to={`/doctors/${item.speciality}`}
               onClick={() => scrollTo(0,0)}
               className="flex flex-col items-center cursor-pointer flex-shirnk-0 hover:translate-y-[-10px] transition-all duration-500"
+              style={{ minWidth: 160 }}
             >
-                <img src={item.image} alt="" className="w-20 sm:w-28 mb-3 "/>
+                <div className="flex items-center justify-center rounded-full bg-[#e6edfa] mb-3" style={{ width: 90, height: 90 }}>
+                  {typeof item.image === 'function' ? (
+                    React.createElement(item.image, { className: "w-14 h-14 object-contain" })
+                  ) : (
+                    <img src={item.image} alt="" className="w-14 h-14 object-contain" />
+                  )}
+                </div>
                 <button
                   className="text-lg font-semibold px-6 py-2 rounded-full bg-[#5F6FFF] text-white shadow hover:bg-[#4a56d6] transition-all duration-300 border-none outline-none"
-                  style={{minWidth: '200px'}}
+                  style={{minWidth: '160px'}}
                 >
                   {item.speciality}
                 </button>

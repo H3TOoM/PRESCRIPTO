@@ -2,7 +2,6 @@ import React from "react";
 import { assets } from "../assets/assets";
 import { FaMessage } from "react-icons/fa6";
 
-
 const Header = () => {
   return (
     <div className="flex flex-col md:flex-row flex-wrap rounded-lg px-6 md:px-10 lg:px-20 bg-[#5F6FFF]">
