@@ -67,7 +67,7 @@ const RelatedDoctors = ({ docId, speciality }) => {
             <img 
               src={doctor.profilePictureUrl || doctor.image} 
               alt="" 
-              className="bg-blue-50 blur-sm" 
+              className="bg-blue-50" 
             />
             <div className="p-4">
               <div className="flex items-center gap-2 text-sm text-center text-green-500">

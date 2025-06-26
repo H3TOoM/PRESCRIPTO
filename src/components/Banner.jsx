@@ -30,7 +30,7 @@ const Banner = () => {
         <img
           src={assets.appointment_img}
           alt=""
-          className="w-full bottom-0 absolute right-0 max-w-md blur-md"
+          className="w-full bottom-0 absolute right-0 max-w-md"
         />
       </div>
     </div>
