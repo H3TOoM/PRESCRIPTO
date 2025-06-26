@@ -1,5 +1,4 @@
 {
-  "welcome": "مرحبا بك في موقعنا",
   "change_language": "تغيير اللغة",
   "nav_home": "الرئيسية",
   "nav_doctors": "كل الأطباء",
@@ -112,5 +111,26 @@
   "myappointments_date_time": "التاريخ والوقت: ",
   "myappointments_notes": "ملاحظات: ",
   "myappointments_show_cancelled": "عرض المواعيد الملغاة",
-  "myappointments_no_cancelled": "لا توجد مواعيد ملغاة."
+  "myappointments_no_cancelled": "لا توجد مواعيد ملغاة.",
+  "profile_uploading": "جاري الرفع...",
+  "profile_change_picture": "تغيير الصورة الشخصية",
+  "profile_image_hint": "JPG, PNG, GIF, WebP حتى 2 ميجابايت",
+  "profile_first_name": "الاسم الأول",
+  "profile_last_name": "اسم العائلة",
+  "profile_email": "البريد الإلكتروني",
+  "profile_phone": "رقم الهاتف",
+  "profile_phone_placeholder": "مثال: 01234567890 أو +201234567890",
+  "profile_address": "العنوان",
+  "profile_address_placeholder": "أدخل عنوانك",
+  "profile_gender": "النوع",
+  "profile_gender_male": "ذكر",
+  "profile_gender_female": "أنثى",
+  "profile_dob": "تاريخ الميلاد",
+  "profile_not_set": "غير محدد",
+  "profile_cancel_btn": "إلغاء",
+  "profile_save_btn": "حفظ البيانات",
+  "profile_saving": "جاري الحفظ...",
+  "profile_change_email_btn": "تغيير البريد الإلكتروني",
+  "profile_change_password_btn": "تغيير كلمة المرور",
+  "profile_edit_btn": "تعديل البيانات"
 } 

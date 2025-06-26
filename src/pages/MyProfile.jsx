@@ -4,6 +4,7 @@ import authService from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import ChangeEmailModal from "../components/ChangeEmailModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";
+import { useTranslation } from "react-i18next";
 
 const MyProfile = () => {
   const { currentUser, updateUser } = useAuth();
@@ -27,6 +28,7 @@ const MyProfile = () => {
     gender: "",
     dateOfBirth: "",
   });
+  const { t } = useTranslation();
 
   useEffect(() => {
     const loadData = async () => {
@@ -192,7 +194,7 @@ const MyProfile = () => {
         
         <div className="flex flex-col gap-2">
           <label className="cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition text-center">
-            {imageLoading ? "Uploading..." : "Change Picture"}
+            {imageLoading ? t("profile_uploading") : t("profile_change_picture")}
             <input
               type="file"
               accept="image/*"
@@ -202,7 +204,7 @@ const MyProfile = () => {
             />
           </label>
           <p className="text-xs text-gray-500 text-center">
-            JPG, PNG, GIF, WebP up to 2MB
+            {t("profile_image_hint")}
           </p>
         </div>
       </div>
@@ -230,7 +232,7 @@ const MyProfile = () => {
                 setUserData((prev) => ({ ...prev, firstName: e.target.value }))
               }
               className="text-2xl font-semibold outline-none border-b border-gray-300"
-              placeholder="First Name"
+              placeholder={t("profile_first_name")}
             />
             <input
               type="text"
@@ -239,7 +241,7 @@ const MyProfile = () => {
                 setUserData((prev) => ({ ...prev, lastName: e.target.value }))
               }
               className="text-2xl font-semibold outline-none border-b border-gray-300"
-              placeholder="Last Name"
+              placeholder={t("profile_last_name")}
             />
           </div>
         ) : (
@@ -263,12 +265,12 @@ const MyProfile = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
         <div>
-          <p className="font-medium">Email</p>
+          <p className="font-medium">{t("profile_email")}</p>
           <p className="text-blue-600">{currentUser?.email}</p>
         </div>
 
         <div>
-          <p className="font-medium">Phone Number</p>
+          <p className="font-medium">{t("profile_phone")}</p>
           {isEdit ? (
             <input
               type="text"
@@ -277,15 +279,15 @@ const MyProfile = () => {
                 setUserData((prev) => ({ ...prev, phoneNumber: e.target.value }))
               }
               className="border p-2 rounded w-full"
-              placeholder="e.g., +201234567890 or 01234567890"
+              placeholder={t("profile_phone_placeholder")}
             />
           ) : (
-            <p>{userData.phoneNumber || "Not set"}</p>
+            <p>{userData.phoneNumber || t("profile_not_set")}</p>
           )}
         </div>
 
         <div className="md:col-span-2">
-          <p className="font-medium">Address</p>
+          <p className="font-medium">{t("profile_address")}</p>
           {isEdit ? (
             <input
               type="text"
@@ -294,20 +296,20 @@ const MyProfile = () => {
                 setUserData((prev) => ({ ...prev, address: e.target.value }))
               }
               className="border p-2 rounded w-full"
-              placeholder="Enter your address"
+              placeholder={t("profile_address_placeholder")}
             />
           ) : (
-            <p>{userData.address || "Not set"}</p>
+            <p>{userData.address || t("profile_not_set")}</p>
           )}
         </div>
 
         <div>
-          <p className="font-medium">Gender</p>
-          <p>{userData.gender}</p>
+          <p className="font-medium">{t("profile_gender")}</p>
+          <p>{userData.gender ? t(`profile_gender_${userData.gender.toLowerCase()}`) : t("profile_not_set")}</p>
         </div>
 
         <div>
-          <p className="font-medium">Date of Birth</p>
+          <p className="font-medium">{t("profile_dob")}</p>
           {isEdit ? (
             <input
               type="date"
@@ -318,7 +320,7 @@ const MyProfile = () => {
               className="border p-2 rounded w-full"
             />
           ) : (
-            <p>{userData.dateOfBirth || "Not set"}</p>
+            <p>{userData.dateOfBirth || t("profile_not_set")}</p>
           )}
         </div>
       </div>
@@ -335,14 +337,14 @@ const MyProfile = () => {
               className="border border-gray-400 text-gray-600 px-6 py-2 rounded-full hover:bg-gray-50 transition"
               disabled={loading}
             >
-              Cancel
+              {t("profile_cancel_btn")}
             </button>
             <button
               onClick={saveProfile}
               disabled={loading}
               className="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition disabled:opacity-50"
             >
-              {loading ? "Saving..." : "Save Profile"}
+              {loading ? t("profile_saving") : t("profile_save_btn")}
             </button>
           </div>
         ) : (
@@ -351,19 +353,19 @@ const MyProfile = () => {
               onClick={() => setChangeEmailModalOpen(true)}
               className="border border-gray-600 text-gray-800 px-6 py-2 rounded-full hover:bg-gray-100 transition"
             >
-              Change Email
+              {t("profile_change_email_btn")}
             </button>
             <button
               onClick={() => setChangePasswordModalOpen(true)}
               className="border border-gray-600 text-gray-800 px-6 py-2 rounded-full hover:bg-gray-100 transition"
             >
-              Change Password
+              {t("profile_change_password_btn")}
             </button>
             <button
               onClick={() => setIsEdit(true)}
               className="border border-indigo-600 text-indigo-600 px-6 py-2 rounded-full hover:bg-indigo-50 transition"
             >
-              Edit Profile
+              {t("profile_edit_btn")}
             </button>
           </div>
         )}

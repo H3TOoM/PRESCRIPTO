@@ -1,5 +1,4 @@
 {
-  "welcome": "Welcome to our website",
   "change_language": "Change Language",
   "nav_home": "HOME",
   "nav_doctors": "ALL DOCTORS",
@@ -112,5 +111,26 @@
   "myappointments_date_time": "Date & Time: ",
   "myappointments_notes": "Notes: ",
   "myappointments_show_cancelled": "Show Cancelled Appointments",
-  "myappointments_no_cancelled": "No cancelled appointments."
+  "myappointments_no_cancelled": "No cancelled appointments.",
+  "profile_uploading": "Uploading...",
+  "profile_change_picture": "Change Picture",
+  "profile_image_hint": "JPG, PNG, GIF, WebP up to 2MB",
+  "profile_first_name": "First Name",
+  "profile_last_name": "Last Name",
+  "profile_email": "Email",
+  "profile_phone": "Phone Number",
+  "profile_phone_placeholder": "e.g., +201234567890 or 01234567890",
+  "profile_address": "Address",
+  "profile_address_placeholder": "Enter your address",
+  "profile_gender": "Gender",
+  "profile_gender_male": "Male",
+  "profile_gender_female": "Female",
+  "profile_dob": "Date of Birth",
+  "profile_not_set": "Not set",
+  "profile_cancel_btn": "Cancel",
+  "profile_save_btn": "Save Profile",
+  "profile_saving": "Saving...",
+  "profile_change_email_btn": "Change Email",
+  "profile_change_password_btn": "Change Password",
+  "profile_edit_btn": "Edit Profile"
 } 
