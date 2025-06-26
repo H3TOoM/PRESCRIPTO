@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import inquiryService from "../services/inquiryService";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 const MedicalConsultation = () => {
   const [message, setMessage] = useState('');
@@ -10,20 +11,21 @@ const MedicalConsultation = () => {
   const [loading, setLoading] = useState(false);
   const { token } = useContext(AppContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Check authentication
   if (!token) {
     return (
       <div className="max-w-2xl p-6 mt-12 ml-auto mr-auto rounded-2xl shadow-md border border-gray-300">
         <h1 className="text-3xl font-semibold mb-6 text-gray-500">
-          Medical Consultation
+          {t("inquiries_title")}
         </h1>
         <div className="text-center py-8">
-          <p className="text-gray-600 mb-4">Please login to submit a consultation.</p>
+          <p className="text-gray-600 mb-4">{t("inquiries_login_prompt")}</p>
           <button
             onClick={() => navigate('/login')}
             className="bg-[#5F6FFF] text-gray-50 py-2 px-6 rounded-md font-semibold shadow-md hover:bg-blue-600 transition ease-in-out duration-500">
-            Login
+            {t("inquiries_login_button")}
           </button>
         </div>
       </div>
@@ -35,11 +37,11 @@ const MedicalConsultation = () => {
     const selectedFiles = Array.from(e.target.files);
     const validFiles = selectedFiles.filter((file) => {
       if (!file.type.startsWith("image/")) {
-        Swal.fire({ title: "Invalid file type", text: "Only images are supported.", icon: "warning" });
+        Swal.fire({ title: t("inquiries_invalid_file_title"), text: t("inquiries_invalid_file_text"), icon: "warning" });
         return false;
       }
       if (file.size > 5 * 1024 * 1024) { // 5MB
-        Swal.fire({ title: "File too large", text: "Image size should be less than 5MB.", icon: "warning" });
+        Swal.fire({ title: t("inquiries_file_too_large_title"), text: t("inquiries_file_too_large_text"), icon: "warning" });
         return false;
       }
       return true;
@@ -57,7 +59,7 @@ const MedicalConsultation = () => {
     e.preventDefault();
 
     if (!message.trim()) {
-      Swal.fire({ title: "Message required", text: "Please enter your consultation message.", icon: "warning" });
+      Swal.fire({ title: t("inquiries_message_required_title"), text: t("inquiries_message_required_text"), icon: "warning" });
       return;
     }
 
@@ -71,14 +73,14 @@ const MedicalConsultation = () => {
 
       await inquiryService.submitConsultation(consultationData);
 
-      Swal.fire({ title: "Success!", text: "Your consultation has been submitted successfully.", icon: "success" });
+      Swal.fire({ title: t("inquiries_success_title"), text: t("inquiries_success_text"), icon: "success" });
       
       setMessage('');
       setFiles([]);
     } catch (error) {
       console.error('Error submitting consultation:', error);
-      const errorMessage = error.response?.data?.message || "Failed to submit consultation";
-      Swal.fire({ title: "Submission Failed", text: errorMessage, icon: "error" });
+      const errorMessage = error.response?.data?.message || t("inquiries_failed_submit_text");
+      Swal.fire({ title: t("inquiries_failed_submit_title"), text: errorMessage, icon: "error" });
     } finally {
       setLoading(false);
     }
@@ -87,14 +89,14 @@ const MedicalConsultation = () => {
   return (
     <div className="max-w-2xl p-6 mt-12 ml-auto mr-auto rounded-2xl shadow-md border border-gray-300">
       <h1 className="text-3xl font-semibold mb-6 text-gray-500">
-        Medical Consultation
+        {t("inquiries_title")}
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {/* Consultation message */}
         <textarea
           className="border border-gray-300 rounded-lg p-4 resize-none h-40 focus:outline-none focus:ring-2 focus:ring-[#5F6FFF] shadow-inner text-gray-900"
-          placeholder="Write your consultation here..."
+          placeholder={t("inquiries_message_placeholder")}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           required
@@ -111,14 +113,14 @@ const MedicalConsultation = () => {
             className="hidden"
             disabled={loading}
           />
-          Attach Images
+          {t("inquiries_attach_images")}
         </label>
 
         {/* Display attached files */}
         {files.length > 0 && (
           <div className="p-4 rounded-md shadow-inner">
             <h2 className="text-gray-900 font-semibold mb-4">
-              Attached Images:
+              {t("inquiries_attached_images")}
             </h2>
             <div className="flex gap-4 flex-wrap">
               {files.map((file, index) => (
@@ -150,7 +152,7 @@ const MedicalConsultation = () => {
           type="submit"
           disabled={loading}
           className={`bg-[#5F6FFF] text-gray-50 py-2 px-6 rounded-md font-semibold shadow-md hover:bg-blue-600 transform hover:translate-y-[-2px] transition ease-in-out duration-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0`}>
-          {loading ? "Submitting..." : "Submit Consultation"}
+          {loading ? t("inquiries_submitting") : t("inquiries_submit_button")}
         </button>
       </form>
     </div>

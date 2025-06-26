@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import appointmentService from "../services/appointmentService";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 const MyAppointment = () => {
   const [appointments, setAppointments] = useState([]);
@@ -11,6 +12,7 @@ const MyAppointment = () => {
   const [loading, setLoading] = useState(true);
   const { token } = useContext(AppContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const fetchAppointments = async () => {
     if (!token) {
@@ -26,7 +28,7 @@ const MyAppointment = () => {
       setCancelledAppointments(cancelled);
     } catch (error) {
       console.error('Error fetching appointments:', error);
-      Swal.fire({ title: "Error loading appointments", icon: "error" });
+      Swal.fire({ title: t("myappointments_error_loading"), icon: "error" });
     } finally {
       setLoading(false);
     }
@@ -39,27 +41,25 @@ const MyAppointment = () => {
   // cancel appointment function
   const handleCancelAppointment = async (appointmentId) => {
     const result = await Swal.fire({
-      title: "Are you sure you want to cancel this appointment?",
+      title: t("myappointments_cancel_confirm_title"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, cancel it!",
-      cancelButtonText: "No"
+      confirmButtonText: t("myappointments_cancel_confirm_yes"),
+      cancelButtonText: t("myappointments_cancel_confirm_no")
     });
 
     if (result.isConfirmed) {
       try {
         await appointmentService.deleteAppointment(appointmentId);
-        
         // Remove from local state
         setAppointments(prev => prev.filter(app => app.id !== appointmentId));
-        
-        Swal.fire("Cancelled!", "Your appointment has been cancelled.", "success");
+        Swal.fire(t("myappointments_cancelled_title"), t("myappointments_cancelled_text"), "success");
       } catch (error) {
         console.error('Error cancelling appointment:', error);
-        const errorMessage = error.response?.data?.message || "Failed to cancel appointment";
-        Swal.fire({ title: "Cancellation Failed", text: errorMessage, icon: "error" });
+        const errorMessage = error.response?.data?.message || t("myappointments_cancel_failed_text");
+        Swal.fire({ title: t("myappointments_cancel_failed_title"), text: errorMessage, icon: "error" });
       }
     }
   };
@@ -77,9 +77,9 @@ const MyAppointment = () => {
     return (
       <div className="p-4">
         <p className="p-3 mt-12 font-semibold text-zinc-900 border-b border-gray-300">
-          My appointments
+          {t("myappointments_title")}
         </p>
-        <div className="p-4 text-gray-500">Loading appointments...</div>
+        <div className="p-4 text-gray-500">{t("myappointments_loading")}</div>
       </div>
     );
   }
@@ -88,9 +88,9 @@ const MyAppointment = () => {
     return (
       <div className="p-4">
         <p className="p-3 mt-12 font-semibold text-zinc-900 border-b border-gray-300">
-          My appointments
+          {t("myappointments_title")}
         </p>
-        <div className="p-4 text-gray-500">Please login to view your appointments.</div>
+        <div className="p-4 text-gray-500">{t("myappointments_login_prompt")}</div>
       </div>
     );
   }
@@ -98,10 +98,10 @@ const MyAppointment = () => {
   return (
     <div>
       <p className="p-3 mt-12 font-semibold text-zinc-900 border-b border-gray-300">
-        My appointments
+        {t("myappointments_title")}
       </p>
       {appointments.length === 0 && (
-        <p className="p-4 text-gray-500">No appointments found.</p>
+        <p className="p-4 text-gray-500">{t("myappointments_no_found")}</p>
       )}
 
       {appointments.map((appointment) => (
@@ -121,17 +121,17 @@ const MyAppointment = () => {
               {appointment.doctorName}
             </p>
             <p>{appointment.doctorSpeciality}</p>
-            <p className="text-zinc-700 font-semibold mt-1">Address : </p>
+            <p className="text-zinc-700 font-semibold mt-1">{t("myappointments_address")}</p>
             <p className="text-xs">{appointment.doctorAddress}</p>
             <p className="text-sm mt-1 mb-2">
               <span className="text-sm text-neutral-700 font-semibold">
-                Date & Time:{" "}
+                {t("myappointments_date_time")}
               </span>
               {formatDate(appointment.appointmentDate)} | {formatTime(appointment.appointmentTime)}
             </p>
             {appointment.notes && (
               <p className="text-sm mt-1">
-                <span className="text-neutral-700 font-semibold">Notes: </span>
+                <span className="text-neutral-700 font-semibold">{t("myappointments_notes")}</span>
                 {appointment.notes}
               </p>
             )}
@@ -143,15 +143,15 @@ const MyAppointment = () => {
                 navigate('/edit-appointment', { state: { appointment } })
               }
             >
-              Edit Appointment
+              {t("myappointments_edit_btn")}
             </button>
             <button
               onClick={() => handleCancelAppointment(appointment.id)}
               className="text-sm text-gray-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-500 hover:text-gray-50 transition-all duration-500">
-              Cancel Appointment
+              {t("myappointments_cancel_btn")}
             </button>
             <button className="text-sm text-gray-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5F6FFF] hover:text-gray-50 transition-all duration-500">
-              Pay Online
+              {t("myappointments_pay_btn")}
             </button>
           </div>
         </div>
@@ -163,12 +163,12 @@ const MyAppointment = () => {
           onClick={() => setShowCancelled(v => !v)}
           className="flex items-center gap-2 px-4 py-2 border rounded bg-gray-100 hover:bg-gray-200 font-semibold text-gray-700"
         >
-          {showCancelled ? "▼" : "►"} Show Cancelled Appointments
+          {showCancelled ? "▼" : "►"} {t("myappointments_show_cancelled")}
         </button>
         {showCancelled && (
           <div className="mt-4">
             {cancelledAppointments.length === 0 ? (
-              <p className="text-gray-500">No cancelled appointments.</p>
+              <p className="text-gray-500">{t("myappointments_no_cancelled")}</p>
             ) : (
               cancelledAppointments.map((appointment) => (
                 <div
@@ -187,17 +187,17 @@ const MyAppointment = () => {
                       {appointment.doctorName}
                     </p>
                     <p>{appointment.doctorSpeciality}</p>
-                    <p className="text-zinc-700 font-semibold mt-1">Address : </p>
+                    <p className="text-zinc-700 font-semibold mt-1">{t("myappointments_address")}</p>
                     <p className="text-xs">{appointment.doctorAddress}</p>
                     <p className="text-sm mt-1 mb-2">
                       <span className="text-sm text-neutral-700 font-semibold">
-                        Date & Time:{" "}
+                        {t("myappointments_date_time")}
                       </span>
                       {formatDate(appointment.appointmentDate)} | {formatTime(appointment.appointmentTime)}
                     </p>
                     {appointment.notes && (
                       <p className="text-sm mt-1">
-                        <span className="text-neutral-700 font-semibold">Notes: </span>
+                        <span className="text-neutral-700 font-semibold">{t("myappointments_notes")}</span>
                         {appointment.notes}
                       </p>
                     )}
