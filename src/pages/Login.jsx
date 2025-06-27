@@ -38,10 +38,13 @@ const Login = () => {
     },
     validationSchema: Yup.object({
       ...(state === "Sign Up" && {
-        firstName: Yup.string().required('First name is required'),
-        lastName: Yup.string().required('Last name is required'),
+        firstName: Yup.string()
+          .required('First name is required')
+          .matches(/^[A-Za-z0-9]+$/, 'First name must be in English letters or digits only, no spaces or symbols'),
+        lastName: Yup.string()
+          .required('Last name is required')
+          .matches(/^[A-Za-z0-9]+$/, 'Last name must be in English letters or digits only, no spaces or symbols'),
         gender: Yup.string().required('Gender is required'),
-
       }),
       email: Yup.string()
         .email('Invalid email')

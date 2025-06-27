@@ -8,6 +8,7 @@
   "nav_appointments": "My Appointments",
   "nav_logout": "Logout",
   "nav_create_account": "Create account",
+  "nav_inquiries": "My Inquiries",
   "header_title": "Book Appointment <br /> With Trusted Doctors",
   "header_subtitle": "Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free.",
   "header_btn": "Book Appointment",
@@ -92,6 +93,7 @@
   "inquiries_attached_images": "Attached Images:",
   "inquiries_submitting": "Submitting...",
   "inquiries_submit_button": "Submit Consultation",
+  "inquiries_cancel_btn": "Cancel",
   "myappointments_title": "My appointments",
   "myappointments_loading": "Loading appointments...",
   "myappointments_login_prompt": "Please login to view your appointments.",
@@ -132,5 +134,15 @@
   "profile_saving": "Saving...",
   "profile_change_email_btn": "Change Email",
   "profile_change_password_btn": "Change Password",
-  "profile_edit_btn": "Edit Profile"
+  "profile_edit_btn": "Edit Profile",
+  "inquiries_previous": "Previous Inquiries",
+  "inquiries_loading": "Loading inquiries...",
+  "inquiries_no_previous": "No previous inquiries found.",
+  "inquiries_message_label": "Your Inquiry",
+  "inquiries_response_label": "Doctor's Response",
+  "inquiries_no_response": "No response yet.",
+  "inquiries_refresh": "Refresh",
+  "inquiries_date_label": "Date",
+  "inquiries_attachments_label": "Attachments",
+  "inquiries_add_btn": "Add Inquiry"
 } 

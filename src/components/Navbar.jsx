@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { FaGlobe } from "react-icons/fa";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -68,6 +69,12 @@ const Navbar = () => {
                 >
                   {t("nav_appointments")}
                 </p>
+                <p
+                  onClick={() => navigate("/inquiries")}
+                  className="hover:text-black cursor-pointer"
+                >
+                  {t("nav_inquiries")}
+                </p>
                 <p onClick={logout} className="hover:text-black cursor-pointer">
                   {t("nav_logout")}
                 </p>
@@ -88,10 +95,13 @@ const Navbar = () => {
             i18n.changeLanguage(newLang);
             localStorage.setItem("i18nextLng", newLang);
           }}
-          className="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
+          className="flex items-center gap-2 p-2 rounded-full hover:bg-blue-50 focus:outline-none transition"
           title="Change Language"
         >
-          <span role="img" aria-label="language">🌐</span>
+          <FaGlobe className="text-primary text-2xl drop-shadow-sm" />
+          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white text-primary font-bold text-xs uppercase shadow border border-primary transition">
+            {i18n.language === "ar" ? "AR" : "EN"}
+          </span>
         </button>
         <assets.menu_icon
           onClick={() => setShowMenu(true)}
