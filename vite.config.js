@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react(), svgr()],
   base: '/',
   optimizeDeps: {
-    include: ['formik', 'yup'], // أضف أي مكتبة تسبب مشاكل
+    include: ['formik', 'yup'], 
   },
 })
