@@ -11,6 +11,9 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
     "@tailwindcss/cli": "^4.0.9",

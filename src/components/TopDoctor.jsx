@@ -39,7 +39,7 @@ const TopDoctor = () => {
           <div
             key={index}
             className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-5px] transition-all duration-500"
-            onClick={() => {navigate(`/appointment/${item._id}`) ; scrollTo(0,0)}}
+            onClick={() => {navigate(`/appointment/${item.id}`) ; scrollTo(0,0)}}
           >
             <img src={item.image} alt="" className="bg-blue-50" />
             <div className="p-4">
@@ -48,7 +48,7 @@ const TopDoctor = () => {
                 <p>{t("topdoctor_available")}</p>
               </div>
               <p className="text-gray-900 text-lg font-medium">{item.firstName +" "+ item.lastName}</p>
-              <p className="text-gray-600 text-xs">{item.speciality}</p>
+              <p className="text-gray-600 text-xs">{t(`speciality_${item.speciality}`) || item.speciality}</p>
             </div>
           </div>
         ))}

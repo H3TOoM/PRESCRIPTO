@@ -79,7 +79,7 @@ const RelatedDoctors = ({ docId, speciality }) => {
               <p className="text-gray-900 text-lg font-medium">
                 {doctor.fullName || doctor.name}
               </p>
-              <p className="text-gray-600 text-xs">{doctor.speciality}</p>
+              <p className="text-gray-600 text-xs">{t(`speciality_${doctor.speciality}`) || doctor.speciality}</p>
               {doctor.degree && (
                 <p className="text-gray-500 text-xs mt-1">{doctor.degree}</p>
               )}
