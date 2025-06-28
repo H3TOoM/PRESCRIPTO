@@ -94,6 +94,42 @@ const appointmentService = {
             console.error('Error fetching cancelled appointments:', error);
             throw error;
         }
+<<<<<<< HEAD
+=======
+    },
+
+    // NEW: Get available dates for booking
+    getAvailableDates: async (daysAhead = 7) => {
+        try {
+            const response = await axiosInstance.get(`/appointments/available-dates?daysAhead=${daysAhead}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching available dates:', error);
+            throw error;
+        }
+    },
+
+    // NEW: Get available time slots for a specific doctor and date
+    getAvailableTimeSlots: async (doctorId, date) => {
+        try {
+            const response = await axiosInstance.get(`/appointments/doctor/${doctorId}/available-slots?date=${date}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching available time slots:', error);
+            throw error;
+        }
+    },
+
+    // NEW: Get standard time slots
+    getStandardTimeSlots: async () => {
+        try {
+            const response = await axiosInstance.get('/appointments/standard-time-slots');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching standard time slots:', error);
+            throw error;
+        }
+>>>>>>> b0c567eb8a16337bd2c865da0422d75b91ed4450
     }
 };
 
