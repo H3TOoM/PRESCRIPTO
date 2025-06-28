@@ -29,9 +29,10 @@ fileUploadInstance.interceptors.request.use(addAuthToken);
 
 const inquiryService = {
     // Get all inquiries for the current user (filtered by role)
-    getAllInquiries: async () => {
+    getAllInquiries: async (specialty = null) => {
         try {
-            const response = await axiosInstance.get('/inquiries');
+            const params = specialty ? { specialty } : {};
+            const response = await axiosInstance.get('/inquiries', { params });
             return response.data;
         } catch (error) {
             console.error('Error fetching inquiries:', error);
@@ -66,6 +67,7 @@ const inquiryService = {
         try {
             const formData = new FormData();
             formData.append('message', consultationData.message);
+            formData.append('specialty', consultationData.specialty);
             
             if (consultationData.files && consultationData.files.length > 0) {
                 consultationData.files.forEach(file => {
@@ -99,6 +101,81 @@ const inquiryService = {
             return response.data;
         } catch (error) {
             console.error('Error deleting inquiry:', error);
+            throw error;
+        }
+    },
+
+    // NEW: Respond to inquiry (doctors only)
+    respondToInquiry: async (id, responseData) => {
+        try {
+            const response = await axiosInstance.post(`/inquiries/${id}/respond`, responseData);
+            return response.data;
+        } catch (error) {
+            console.error('Error responding to inquiry:', error);
+            throw error;
+        }
+    },
+
+    // NEW: Respond to inquiry with files (doctors only)
+    respondToInquiryWithFiles: async (id, responseData) => {
+        try {
+            const formData = new FormData();
+            formData.append('response', responseData.response);
+            
+            if (responseData.responseFiles && responseData.responseFiles.length > 0) {
+                responseData.responseFiles.forEach(file => {
+                    formData.append('responseFiles', file);
+                });
+            }
+
+            const response = await fileUploadInstance.post(`/inquiries/${id}/respond/upload`, formData);
+            return response.data;
+        } catch (error) {
+            console.error('Error responding to inquiry with files:', error);
+            throw error;
+        }
+    },
+
+    // NEW: Rate inquiry (patients only)
+    rateInquiry: async (id, rating) => {
+        try {
+            const response = await axiosInstance.post(`/inquiries/${id}/rate`, { isLike: rating });
+            return response.data;
+        } catch (error) {
+            console.error('Error rating inquiry:', error);
+            throw error;
+        }
+    },
+
+    // NEW: Get inquiries by specialty (doctors only)
+    getInquiriesBySpecialty: async (specialty) => {
+        try {
+            const response = await axiosInstance.get(`/inquiries/specialty/${specialty}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching inquiries by specialty:', error);
+            throw error;
+        }
+    },
+
+    // NEW: Get inquiries by doctor (admin/doctor only)
+    getInquiriesByDoctor: async (doctorId) => {
+        try {
+            const response = await axiosInstance.get(`/inquiries/doctor/${doctorId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching inquiries by doctor:', error);
+            throw error;
+        }
+    },
+
+    // NEW: Get inquiry analytics (admin only)
+    getInquiryAnalytics: async () => {
+        try {
+            const response = await axiosInstance.get('/inquiries/analytics');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching inquiry analytics:', error);
             throw error;
         }
     }

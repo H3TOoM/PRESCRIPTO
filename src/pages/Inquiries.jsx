@@ -105,8 +105,16 @@ const MedicalConsultation = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm(t("inquiries_confirm_delete"));
-    if (!confirm) return;
+    const result = await Swal.fire({
+      title: t("inquiries_confirm_delete"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: t("myappointments_cancel_confirm_yes"),
+      cancelButtonText: t("myappointments_cancel_confirm_no")
+    });
+    if (!result.isConfirmed) return;
     setDeletingId(id);
     try {
       await inquiryService.deleteInquiry(id);

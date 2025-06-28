@@ -94,8 +94,7 @@ const appointmentService = {
             console.error('Error fetching cancelled appointments:', error);
             throw error;
         }
-<<<<<<< HEAD
-=======
+
     },
 
     // NEW: Get available dates for booking
@@ -129,7 +128,6 @@ const appointmentService = {
             console.error('Error fetching standard time slots:', error);
             throw error;
         }
->>>>>>> b0c567eb8a16337bd2c865da0422d75b91ed4450
     }
 };
 
